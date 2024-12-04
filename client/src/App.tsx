@@ -95,6 +95,7 @@ function App() {
     if (!isRaceStarted) return;
 
     const wsProtocol = window.location.protocol === "https:" ? "wss:" : "ws:";
+    console.log(`wsProtocol: ${wsProtocol}`);
     const wsHost = process.env.REACT_APP_WS_HOST;
     if (!wsHost) {
       console.log("REACT_APP_WS_HOST not found, defaulting to localhost:8080");
