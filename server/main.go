@@ -5,8 +5,6 @@ import (
 	"net/http"
 	"os"
 
-	"github.com/joho/godotenv"
-
 	"centaur/handlers"
 	"centaur/services"
 
@@ -15,9 +13,9 @@ import (
 
 func init() {
 	// Load .env file
-	if err := godotenv.Load(); err != nil {
-		log.Printf("Warning: .env file not found or error loading it: %v", err)
-	}
+	// if err := godotenv.Load(); err != nil {
+	// 	log.Printf("Warning: .env file not found or error loading it: %v", err)
+	// }
 }
 
 func main() {
