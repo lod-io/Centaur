@@ -95,10 +95,7 @@ function App() {
     if (!isRaceStarted) return;
 
     const wsProtocol = window.location.protocol === "https:" ? "wss:" : "ws:";
-    const wsHost =
-      process.env.NODE_ENV === "development"
-        ? "localhost:8080"
-        : window.location.host;
+    const wsHost = process.env.REACT_APP_WS_HOST || "localhost:8080";
     const ws = new WebSocket(`${wsProtocol}//${wsHost}/ws`);
 
     ws.onopen = () => console.log("WebSocket connected");
