@@ -105,8 +105,6 @@ Contributions are welcome! Please fork the repository and submit a pull request 
 
 This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
 
-### Acknowledgments
-
 - This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 - Special thanks to the contributors of the libraries and tools used in this project.
 # Centaur
