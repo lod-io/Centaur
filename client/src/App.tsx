@@ -189,6 +189,8 @@ function App() {
         }),
       });
 
+      console.log("Response from submit-answer:", response);
+
       if (!response.ok) throw new Error("Failed to submit answer");
 
       const result = await response.json();
