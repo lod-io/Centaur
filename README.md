@@ -2,6 +2,12 @@
 
 Centaur is a mini web application that visually compares AI models in a horse racing game. Users select AI models as jockeys for horses, and the race progresses based on each model's speed and accuracy in answering questions. For every correct answer, the horse advances. If the model answers incorrectly, the horse must pause for a fixed time before continuing. This setup allows users to observe and compare the performance of different large language models (LLMs) in a dynamic and engaging way.
 
+
+
+https://github.com/user-attachments/assets/997f6dfa-3b44-4b4a-9205-449cc06f55d9
+
+
+
 ## Features
 
 - **AI Horse Racing**: Choose from a variety of AI models to act as jockeys for your horses.
@@ -97,14 +103,42 @@ These instructions will help you set up and run the Centaur application on your 
 - **Client**: The React frontend is located in the `client` directory.
 - **Server**: The Go backend is located in the `server` directory.
 
-### Contributing
-
-Contributions are welcome! Please fork the repository and submit a pull request for any improvements or bug fixes.
-
 ### License
 
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+Centaur is released under the MIT License. You are free to use, modify, and distribute the code for both commercial and non-commercial purposes.
 
-- This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
-- Special thanks to the contributors of the libraries and tools used in this project.
-# Centaur
+### Contributions
+
+We welcome contributions from the community! If you'd like to contribute to Centaur, please follow these steps:
+
+1. **Fork the Repository**: Click the "Fork" button at the top of this page to create a copy of the repository under your GitHub account.
+
+2. **Clone Your Fork**: Use the following command to clone your forked repository to your local machine:
+
+   ```bash
+   git clone https://github.com/your-username/Centaur.git
+   ```
+
+3. **Create a Branch**: Create a new branch for your feature or bug fix:
+
+   ```bash
+   git checkout -b feature-or-bugfix-name
+   ```
+
+4. **Make Your Changes**: Implement your changes in the codebase.
+
+5. **Commit Your Changes**: Commit your changes with a descriptive commit message:
+
+   ```bash
+   git commit -m "Description of changes"
+   ```
+
+6. **Push to Your Fork**: Push your changes to your forked repository:
+
+   ```bash
+   git push origin feature-or-bugfix-name
+   ```
+
+7. **Submit a Pull Request**: Go to the original repository and click "New Pull Request". Provide a clear description of your changes and why they should be merged.
+
+Thank you for your contributions! Together, we can make Centaur even better.
