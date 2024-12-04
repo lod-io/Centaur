@@ -4,7 +4,6 @@ import (
 	"log"
 	"net/http"
 	"os"
-	"strings"
 
 	"centaur/handlers"
 	"centaur/services"
@@ -49,24 +48,7 @@ func main() {
 
 func corsMiddleware(next http.Handler) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		origin := r.Header.Get("Origin")
-		allowedOrigins := os.Getenv("ALLOWED_ORIGINS")
-		if allowedOrigins == "" {
-			log.Println("ALLOWED_ORIGINS not found, defaulting to http://localhost:3000")
-			allowedOrigins = "http://localhost:3000" // Default value for local development
-		} else {
-			log.Printf("ALLOWED_ORIGINS found: %s", allowedOrigins)
-		}
-
-		// Split the allowed origins by comma and check if the request origin is allowed
-		for _, allowedOrigin := range strings.Split(allowedOrigins, ",") {
-			if origin == strings.TrimSpace(allowedOrigin) {
-				w.Header().Set("Access-Control-Allow-Origin", origin)
-				w.Header().Set("Access-Control-Allow-Credentials", "true")
-				break
-			}
-		}
-
+		w.Header().Set("Access-Control-Allow-Origin", "*")
 		w.Header().Set("Access-Control-Allow-Methods", "POST, GET, OPTIONS, PUT, DELETE")
 		w.Header().Set("Access-Control-Allow-Headers", "Content-Type, Authorization")
 		if r.Method == "OPTIONS" {

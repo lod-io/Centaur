@@ -22,6 +22,8 @@ func NewAnswerHandler(answerService *services.AnswerService) *AnswerHandler {
 }
 
 func (h *AnswerHandler) SubmitAnswer(w http.ResponseWriter, r *http.Request) {
+	log.Printf("Received request to submit answer")
+
 	w.Header().Set("Access-Control-Allow-Origin", "*")
 	w.Header().Set("Access-Control-Allow-Methods", "POST, OPTIONS")
 	w.Header().Set("Access-Control-Allow-Headers", "Content-Type")
