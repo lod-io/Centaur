@@ -95,8 +95,13 @@ function App() {
     if (!isRaceStarted) return;
 
     const wsProtocol = window.location.protocol === "https:" ? "wss:" : "ws:";
-    const wsHost = process.env.REACT_APP_WS_HOST || "localhost:8080";
-    const ws = new WebSocket(`${wsProtocol}//${wsHost}/ws`);
+    const wsHost = process.env.REACT_APP_WS_HOST;
+    if (!wsHost) {
+      console.log("REACT_APP_WS_HOST not found, defaulting to localhost:8080");
+    } else {
+      console.log(`Found REACT_APP_WS_HOST: ${wsHost}`);
+    }
+    const ws = new WebSocket(`${wsProtocol}//${wsHost || "localhost:8080"}/ws`);
 
     ws.onopen = () => console.log("WebSocket connected");
     ws.onerror = (error) => console.error("WebSocket error:", error);
