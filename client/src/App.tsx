@@ -177,23 +177,20 @@ function App() {
       const response = await fetch("/api/submit-answer", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          horseId: horseId,
-          question: {
-            id: question.id,
-            content: question.content,
-            answer: question.answer,
-            choices: question.choices,
-          },
-          modelValue: horse.modelValue,
-        }),
+        body: JSON.stringify(payload),
       });
 
       console.log("Response from submit-answer:", response);
 
-      if (!response.ok) throw new Error("Failed to submit answer");
+      const responseText = await response.text();
+      console.log("Response text:", responseText);
 
-      const result = await response.json();
+      if (!responseText) {
+        console.error("Empty response body");
+        return; // Stop the program if the body is empty
+      }
+
+      const result = JSON.parse(responseText);
 
       setGameState((prev) => {
         const newHorses = prev.horses.map((h): Horse => {
