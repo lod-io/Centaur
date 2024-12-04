@@ -9,6 +9,7 @@ import (
 	"centaur/services"
 
 	"github.com/gorilla/mux"
+	// "github.com/joho/godotenv"
 )
 
 func init() {
@@ -42,7 +43,7 @@ func main() {
 	}
 
 	log.Printf("Server starting on port %s", port)
-	log.Fatal(http.ListenAndServe(":"+port, r))
+	log.Fatal(http.ListenAndServe("0.0.0.0:"+port, r))
 }
 
 func corsMiddleware(next http.Handler) http.Handler {
