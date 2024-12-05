@@ -1,4 +1,5 @@
 # 🦄 Centaur: AI Horse Racing
+> We're [live](centaur-client.onrender.com)! 🎉
 
 Centaur is a mini web application that visually compares AI models in a horse racing game. Users select AI models as jockeys for horses, and the race progresses based on each model's speed and accuracy in answering questions. For every correct answer, the horse advances. If the model answers incorrectly, the horse must pause for a fixed time before continuing. This setup allows users to observe and compare the performance of different large language models (LLMs) in a dynamic and engaging way.
 
@@ -6,7 +7,7 @@ Centaur is a mini web application that visually compares AI models in a horse ra
 
 https://github.com/user-attachments/assets/997f6dfa-3b44-4b4a-9205-449cc06f55d9
 
-
+To ensure fairness, we set the hyperparameters as follows: temperature = 0.0, top-k = 1, and top-p = 0.0.
 
 ## Features
 
