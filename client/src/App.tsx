@@ -9,6 +9,7 @@ import {
   createTheme,
   Popover,
   Link,
+  useMediaQuery,
 } from "@mui/material";
 import { Answer, GameState, Horse, MODEL_OPTIONS, Question } from "./types";
 import RaceTrack from "./components/RaceTrack";
@@ -287,53 +288,68 @@ function App() {
     return gameState.horses.every((horse) => horse.modelValue);
   };
 
+  const isSmallScreen = useMediaQuery(darkTheme.breakpoints.down("md")); // lg is typically 1200px
+
   return (
     <ThemeProvider theme={darkTheme}>
       <CssBaseline />
-      <Container maxWidth="lg" sx={{ py: 3 }}>
-        <Stack spacing={6} alignItems="center">
-          <Stack direction="column" spacing={0} alignItems="center">
-            <Typography
-              variant="h1"
-              sx={{
-                color: darkTheme.palette.text.primary,
-                margin: 0,
-                fontSize: "2.5rem",
-                fontWeight: "bold",
-                textAlign: "center",
-              }}
-            >
-              Centaur: AI Horse Racing
-            </Typography>
-            <HeaderButtons textColor={darkTheme.palette.text.primary} />
-          </Stack>
-          <HorseSelector
-            horses={gameState.horses}
-            isRaceStarted={isRaceStarted}
-            onNameChange={handleNameChange}
-          />
-          <RaceTrack horses={gameState.horses} />
-          {!isRaceStarted && (
-            <Button
-              variant="contained"
-              color="primary"
-              size="large"
-              onClick={() => setIsRaceStarted(true)}
-              disabled={!canStartRace()}
-              sx={{ mt: 2, textTransform: "none" }}
-            >
-              Begin Race 🏆
-            </Button>
-          )}
-          {isRaceStarted && (
-            <QAContainer
-              questions={gameState.questions}
-              answers={gameState.answers}
+      <div
+        style={{
+          padding: isSmallScreen ? "10px" : "25px",
+          height: "100vh",
+          maxWidth: "100vw",
+        }}
+      >
+        <Stack
+          direction={isSmallScreen ? "column" : "row"}
+          spacing={3}
+          sx={{
+            "& > :first-of-type": { flex: 3.5 }, // Game controls take 1 part
+            "& > :last-child": { flex: 1 }, // QAContainer takes 3 parts
+          }}
+        >
+          <Stack spacing={3} alignItems="center">
+            <Stack direction="column" spacing={0} alignItems="center">
+              <Typography
+                variant="h1"
+                sx={{
+                  color: darkTheme.palette.text.primary,
+                  margin: 0,
+                  fontSize: "2.5rem",
+                  fontWeight: "bold",
+                  textAlign: "center",
+                }}
+              >
+                Centaur: AI Horse Racing
+              </Typography>
+              <HeaderButtons textColor={darkTheme.palette.text.primary} />
+            </Stack>
+            <HorseSelector
               horses={gameState.horses}
+              isRaceStarted={isRaceStarted}
+              onNameChange={handleNameChange}
             />
-          )}
+            <RaceTrack horses={gameState.horses} />
+            {!isRaceStarted && (
+              <Button
+                variant="contained"
+                color="primary"
+                size="large"
+                onClick={() => setIsRaceStarted(true)}
+                disabled={!canStartRace()}
+                sx={{ mt: 2, textTransform: "none" }}
+              >
+                Begin Race 🏆
+              </Button>
+            )}
+          </Stack>
+          <QAContainer
+            questions={gameState.questions}
+            answers={gameState.answers}
+            horses={gameState.horses}
+          />
         </Stack>
-      </Container>
+      </div>
     </ThemeProvider>
   );
 }

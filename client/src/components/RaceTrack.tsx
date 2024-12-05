@@ -163,7 +163,14 @@ const RaceTrack: React.FC<RaceTrackProps> = ({ horses }) => {
               ) : (
                 // Show horse emoji and overlay icons on larger screens
                 <>
-                  <Box sx={{ fontSize: "2em" }}>{horse.emoji}</Box>
+                  <Box
+                    sx={{
+                      fontSize: "2em",
+                      transform: "scaleX(-1)",
+                    }}
+                  >
+                    {horse.emoji}
+                  </Box>
                   {horse.isWaiting && <SleepOverlay>💤</SleepOverlay>}
                   {overlayIcon && <SleepOverlay>{overlayIcon}</SleepOverlay>}
                 </>
