@@ -100,7 +100,12 @@ export const HeaderButtons = ({ textColor }: HeaderButtonsProps) => {
           <br />
           <br />
           Learn more at{" "}
-          <Link href="https://clod.io" target="_blank" rel="noopener">
+          <Link
+            href="https://clod.io"
+            target="_blank"
+            rel="noopener"
+            color={textColor}
+          >
             clod.io
           </Link>
           .

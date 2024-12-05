@@ -6,6 +6,7 @@ import {
   Stack,
 } from "@mui/material";
 import { Horse, MODEL_OPTIONS } from "../types";
+import { useEffect } from "react";
 
 interface HorseSelectorProps {
   horses: Horse[];
@@ -21,6 +22,23 @@ const HorseSelector: React.FC<HorseSelectorProps> = ({
   const isModelSelected = (modelValue: string) => {
     return horses.some((horse) => horse.modelValue === modelValue);
   };
+
+  useEffect(() => {
+    const hasNoModelsSelected = horses.every((horse) => !horse.modelValue);
+
+    if (hasNoModelsSelected && !isRaceStarted) {
+      const availableModels = [...MODEL_OPTIONS];
+
+      horses.forEach((horse) => {
+        const randomIndex = Math.floor(Math.random() * availableModels.length);
+        const randomModel = availableModels[randomIndex];
+
+        availableModels.splice(randomIndex, 1);
+
+        onNameChange(horse.id, randomModel.value);
+      });
+    }
+  }, []);
 
   return (
     <Stack
@@ -54,12 +72,12 @@ const HorseSelector: React.FC<HorseSelectorProps> = ({
                 color: horse.color,
               }}
             >
-              Choose Jockey {horse.emoji}
+              Choose Jockey
             </InputLabel>
             <Select
               labelId={`horse-${horse.id}-label`}
               value={horse.modelValue}
-              label={`Choose Jockey ${horse.emoji}`}
+              label={`Choose Jockey`}
               onChange={(e) => onNameChange(horse.id, e.target.value)}
               disabled={isRaceStarted}
               sx={{
