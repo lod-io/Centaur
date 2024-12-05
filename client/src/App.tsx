@@ -5,13 +5,17 @@ import {
   CssBaseline,
   Stack,
   ThemeProvider,
+  Typography,
   createTheme,
+  Popover,
+  Link,
 } from "@mui/material";
 import { Answer, GameState, Horse, MODEL_OPTIONS, Question } from "./types";
 import RaceTrack from "./components/RaceTrack";
 import HorseSelector from "./components/HorseSelector";
 import QAContainer from "./components/QAContainer";
 import { questionBank } from "./data/questionBank";
+import { HeaderButtons } from "./components/HeaderButtons";
 
 // Create dark theme
 const darkTheme = createTheme({
@@ -225,7 +229,7 @@ function App() {
                     return horse;
                   }),
                 }));
-              }, 6000);
+              }, 1000);
               return { ...h, isProcessing: false, isWaiting: true };
             }
           }
@@ -287,19 +291,22 @@ function App() {
     <ThemeProvider theme={darkTheme}>
       <CssBaseline />
       <Container maxWidth="lg" sx={{ py: 3 }}>
-        <Stack spacing={3} alignItems="center">
-          <h1
-            style={{
-              color: darkTheme.palette.text.primary,
-              margin: 0,
-              marginBottom: "1rem",
-              fontSize: "2.5rem",
-              fontWeight: "bold",
-              textAlign: "center",
-            }}
-          >
-            Centaur: AI Horse Racing
-          </h1>
+        <Stack spacing={4} alignItems="center">
+          <Stack direction="column" spacing={0} alignItems="center">
+            <Typography
+              variant="h1"
+              sx={{
+                color: darkTheme.palette.text.primary,
+                margin: 0,
+                fontSize: "2.5rem",
+                fontWeight: "bold",
+                textAlign: "center",
+              }}
+            >
+              Centaur: AI Horse Racing
+            </Typography>
+            <HeaderButtons textColor={darkTheme.palette.text.primary} />
+          </Stack>
           <HorseSelector
             horses={gameState.horses}
             isRaceStarted={isRaceStarted}
