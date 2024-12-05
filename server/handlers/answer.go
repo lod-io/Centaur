@@ -22,7 +22,6 @@ func NewAnswerHandler(answerService *services.AnswerService) *AnswerHandler {
 }
 
 func (h *AnswerHandler) SubmitAnswer(w http.ResponseWriter, r *http.Request) {
-	log.Printf("Received request to submit answer")
 
 	w.Header().Set("Access-Control-Allow-Origin", "*")
 	w.Header().Set("Access-Control-Allow-Methods", "POST, OPTIONS")
@@ -37,8 +36,6 @@ func (h *AnswerHandler) SubmitAnswer(w http.ResponseWriter, r *http.Request) {
 	body, _ := io.ReadAll(r.Body)
 	r.Body = io.NopCloser(bytes.NewBuffer(body)) // Restore the body
 
-	log.Printf("Raw request body: %s", string(body))
-
 	var req models.SubmitAnswerRequest
 	if err := json.NewDecoder(r.Body).Decode(&req); err != nil {
 		log.Printf("Error decoding request: %v", err)
@@ -47,11 +44,7 @@ func (h *AnswerHandler) SubmitAnswer(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	log.Printf("Decoded request: %+v", req)
-
 	response := h.answerService.ProcessAnswer(req)
-
-	log.Printf("Response from answer service: %+v", response)
 
 	w.Header().Set("Content-Type", "application/json")
 	json.NewEncoder(w).Encode(response)

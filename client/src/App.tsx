@@ -95,16 +95,8 @@ function App() {
     if (!isRaceStarted) return;
 
     const wsProtocol = window.location.protocol === "https:" ? "wss:" : "ws:";
-    console.log(`wsProtocol: ${wsProtocol}`);
     const wsHost = process.env.REACT_APP_WS_HOST;
-    if (!wsHost) {
-      console.log("REACT_APP_WS_HOST not found, defaulting to localhost:8080");
-    } else {
-      console.log(`Found REACT_APP_WS_HOST: ${wsHost}`);
-    }
     const ws = new WebSocket(`${wsProtocol}//${wsHost || "localhost:8080"}/ws`);
-
-    console.log("WebSocket:", ws);
 
     ws.onopen = () => console.log("WebSocket connected");
     ws.onerror = (error) => console.error("WebSocket error:", error);
@@ -174,7 +166,6 @@ function App() {
         },
         modelValue: horse.modelValue,
       };
-      console.log("Sending payload:", payload);
 
       const apiUrl =
         process.env.REACT_APP_API_URL || "https://centaur-server.onrender.com";
@@ -184,10 +175,7 @@ function App() {
         body: JSON.stringify(payload),
       });
 
-      console.log("Response from submit-answer:", response);
-
       const responseText = await response.text();
-      console.log("Response text:", responseText);
 
       if (!responseText) {
         console.error("Empty response body");

@@ -125,7 +125,6 @@ REMEMBER: Always respond with valid JSON containing exactly one of the provided 
 					cleanContent = strings.TrimPrefix(cleanContent, "json")
 					// Finally trim any remaining whitespace
 					cleanContent = strings.Trim(cleanContent, "`\n\r\t ")
-					log.Printf("\n\nModel %s's response to question: %s: %s", model, question.Content, cleanContent)
 
 					// Try parsing as JSON first
 					var selectedAnswer struct {
@@ -145,14 +144,13 @@ REMEMBER: Always respond with valid JSON containing exactly one of the provided 
 							return c
 						}
 					}
-
-					log.Printf("%s's response didn't match any choices, selecting random choice\n", model)
 				}
 			}
 		}
 	}
 
 	// If we get here, something went wrong - return a random choice as fallback
+	log.Printf("%s's response didn't match any choices, selecting random choice\n\n", model)
 	r := rand.New(rand.NewSource(time.Now().UnixNano()))
 	return question.Choices[r.Intn(len(question.Choices))]
 }
