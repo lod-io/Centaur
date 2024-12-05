@@ -42,10 +42,10 @@ export const HeaderButtons = ({ textColor }: HeaderButtonsProps) => {
           vertical: "top",
           horizontal: "left",
         }}
-        sx={{ maxWidth: "1500px" }}
+        sx={{ maxWidth: "1300px" }}
       >
         <Typography sx={{ p: 2 }}>
-          Welcome to Centaur - The AI Horse Racing Game!
+          Welcome to Centaur - The AI Horse Racing Game.
           <ol>
             <li>
               Select different AI models for each horse using the dropdown menus
@@ -91,11 +91,12 @@ export const HeaderButtons = ({ textColor }: HeaderButtonsProps) => {
           vertical: "top",
           horizontal: "left",
         }}
-        sx={{ maxWidth: "1500px" }}
+        sx={{ maxWidth: "1300px" }}
       >
         <Typography sx={{ p: 2 }}>
           CLōD is the primary technology that powers Centaur. It provides a
-          unified LLM API for all of our AI solutions.
+          unified LLM API that enables each horse to leverage different AI
+          models for racing, ensuring a dynamic and competitive experience.
           <br />
           <br />
           Learn more at{" "}

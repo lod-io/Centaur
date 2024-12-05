@@ -291,7 +291,7 @@ function App() {
     <ThemeProvider theme={darkTheme}>
       <CssBaseline />
       <Container maxWidth="lg" sx={{ py: 3 }}>
-        <Stack spacing={4} alignItems="center">
+        <Stack spacing={6} alignItems="center">
           <Stack direction="column" spacing={0} alignItems="center">
             <Typography
               variant="h1"
