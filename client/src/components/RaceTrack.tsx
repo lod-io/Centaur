@@ -89,6 +89,14 @@ const FinishLine = styled(Box)({
     "repeating-linear-gradient(0deg, #000, #000 10px, #fff 10px, #fff 20px)",
 });
 
+const CenterText = styled(Box)({
+  display: "flex",
+  alignItems: "center",
+  justifyContent: "center",
+  fontSize: "1.2em",
+  fontWeight: "bold",
+});
+
 interface RaceTrackProps {
   horses: Horse[];
 }
@@ -106,6 +114,21 @@ const RaceTrack: React.FC<RaceTrackProps> = ({ horses }) => {
     <RaceTrackContainer elevation={3}>
       <StartLine />
       <FinishLine />
+      {horses.map((horse) => (
+        <CenterText
+          key={`hello-${horse.id}`}
+          sx={{
+            gridRow: horse.id,
+            gridColumn: 6, // Middle column (6 of 11)
+            whiteSpace: "nowrap",
+            color: "#101c0f",
+            fontWeight: "semibold",
+            fontSize: isSmallScreen ? "0.8em" : "1.5em",
+          }}
+        >
+          {horse.name}
+        </CenterText>
+      ))}
       {horses.map((horse) => {
         let overlayIcon = null;
 
@@ -140,9 +163,7 @@ const RaceTrack: React.FC<RaceTrackProps> = ({ horses }) => {
               ) : (
                 // Show horse emoji and overlay icons on larger screens
                 <>
-                  <Box sx={{ fontSize: "2em", transform: "scaleX(-1)" }}>
-                    {horse.emoji}
-                  </Box>
+                  <Box sx={{ fontSize: "2em" }}>{horse.emoji}</Box>
                   {horse.isWaiting && <SleepOverlay>💤</SleepOverlay>}
                   {overlayIcon && <SleepOverlay>{overlayIcon}</SleepOverlay>}
                 </>

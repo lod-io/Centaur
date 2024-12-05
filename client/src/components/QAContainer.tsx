@@ -1,4 +1,4 @@
-import { Box, Paper, Stack, styled } from "@mui/material";
+import { Box, Paper, Stack, styled, Divider } from "@mui/material";
 import { Answer, Question, Horse } from "../types";
 
 const QAContainerStyled = styled(Paper)(({ theme }) => ({
@@ -20,7 +20,7 @@ const QAContainer: React.FC<QAContainerProps> = ({
   horses,
 }) => (
   <QAContainerStyled elevation={3}>
-    <Stack spacing={2}>
+    <Stack spacing={5} divider={<Divider flexItem />} sx={{ padding: 3 }}>
       {questions.map((question, index) => {
         const questionAnswers = answers.filter(
           (a) => a.questionId === question.id
@@ -42,8 +42,9 @@ const QAContainer: React.FC<QAContainerProps> = ({
                     {answer.status === "approved" ? "✅ " : "❌ "}
                     {horses.find((horse) => horse.id === answer.horseId)
                       ?.name || "Unknown Horse"}
-                    : {answer.content}
-                  </span>
+                    :
+                  </span>{" "}
+                  {answer.content}
                 </Box>
               ))
             ) : (
