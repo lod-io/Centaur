@@ -104,6 +104,8 @@ function App() {
     }
     const ws = new WebSocket(`${wsProtocol}//${wsHost || "localhost:8080"}/ws`);
 
+    console.log("WebSocket:", ws);
+
     ws.onopen = () => console.log("WebSocket connected");
     ws.onerror = (error) => console.error("WebSocket error:", error);
     ws.onclose = () => console.log("WebSocket disconnected");
