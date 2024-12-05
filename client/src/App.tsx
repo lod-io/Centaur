@@ -176,7 +176,9 @@ function App() {
       };
       console.log("Sending payload:", payload);
 
-      const response = await fetch("/api/submit-answer", {
+      const apiUrl =
+        process.env.REACT_APP_API_URL || "https://centaur-server.onrender.com";
+      const response = await fetch(`${apiUrl}/api/submit-answer`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(payload),
