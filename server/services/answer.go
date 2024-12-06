@@ -42,8 +42,8 @@ func (s *AnswerService) generateAnswer(model string, question models.Question) s
 	systemPrompt := `You are a choice selector. Your ONLY job is to select ONE answer from the provided choices.
 CRITICAL RULES:
 1. You MUST select EXACTLY ONE of the provided choices
-2. Your response must be a JSON object with a "selected_choice" field
-3. The "selected_choice" value MUST be an exact match to one of the provided choices
+2. Your response must be the exact text of your chosen answer - nothing more
+3. The selected choice MUST be an exact match to one of the provided choices
 4. Do not explain your choice or add any other text
 5. If unsure, make your best guess - you MUST choose one
 
@@ -52,9 +52,9 @@ Question: What is the capital of France?
 Choices: London, Paris, Berlin
 
 Example response:
-{"selected_choice": "Paris"}
+Paris
 
-REMEMBER: Always respond with valid JSON containing exactly one of the provided choices.`
+REMEMBER: Respond with exactly one of the provided choices - no explanation, just the choice.`
 
 	// Prepare the request payload
 	payload := map[string]interface{}{
@@ -64,9 +64,6 @@ REMEMBER: Always respond with valid JSON containing exactly one of the provided 
 			{"role": "user", "content": fmt.Sprintf("Question: %s\nChoices: %s",
 				question.Content,
 				strings.Join(question.Choices, ", "))},
-		},
-		"response_format": map[string]string{
-			"type": "json_object",
 		},
 		"max_tokens":  80,
 		"temperature": 0.0,
@@ -119,26 +116,10 @@ REMEMBER: Always respond with valid JSON containing exactly one of the provided 
 		if choice, ok := choices[0].(map[string]interface{}); ok {
 			if message, ok := choice["message"].(map[string]interface{}); ok {
 				if content, ok := message["content"].(string); ok {
-					// First trim all whitespace
+					// Clean the content of any whitespace or special characters
 					cleanContent := strings.Trim(content, "`\n\r\t ")
-					// Then remove the "json" prefix
-					cleanContent = strings.TrimPrefix(cleanContent, "json")
-					// Finally trim any remaining whitespace
-					cleanContent = strings.Trim(cleanContent, "`\n\r\t ")
 
-					// Try parsing as JSON first
-					var selectedAnswer struct {
-						SelectedChoice string `json:"selected_choice"`
-					}
-					if err := json.Unmarshal([]byte(cleanContent), &selectedAnswer); err == nil {
-						for _, c := range question.Choices {
-							if c == selectedAnswer.SelectedChoice {
-								return c
-							}
-						}
-					}
-
-					// If JSON parsing fails, try direct matching
+					// Try direct matching with the choices
 					for _, c := range question.Choices {
 						if strings.EqualFold(cleanContent, c) {
 							return c
