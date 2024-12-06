@@ -65,10 +65,7 @@ REMEMBER: Respond with exactly one of the provided choices - no explanation, jus
 				question.Content,
 				strings.Join(question.Choices, ", "))},
 		},
-		"max_tokens":  80,
-		"temperature": 0.0,
-		"top_p":       0.0,
-		"top_k":       1,
+		"max_tokens": 80,
 	}
 	payloadBytes, err := json.Marshal(payload)
 	if err != nil {
@@ -131,7 +128,7 @@ REMEMBER: Respond with exactly one of the provided choices - no explanation, jus
 	}
 
 	// If we get here, something went wrong - return a random choice as fallback
-	log.Printf("%s's response didn't match any choices, selecting random choice\n\n", model)
+	log.Printf("\n\n%s's response didn't match any choices, selecting random choice\n\n", model)
 	r := rand.New(rand.NewSource(time.Now().UnixNano()))
 	return question.Choices[r.Intn(len(question.Choices))]
 }

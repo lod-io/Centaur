@@ -64,3 +64,8 @@ export const MODEL_OPTIONS: ModelOption[] = [
 ];
 
 export type QuestionBankEntry = Omit<Question, 'column'>; 
+
+export type AttemptedQuestion = {
+  horseId: number;
+  questionId: string;
+};

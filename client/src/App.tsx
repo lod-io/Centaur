@@ -1,17 +1,21 @@
 import { useState, useEffect } from "react";
 import {
   Button,
-  Container,
   CssBaseline,
   Stack,
   ThemeProvider,
   Typography,
   createTheme,
-  Popover,
-  Link,
   useMediaQuery,
 } from "@mui/material";
-import { Answer, GameState, Horse, MODEL_OPTIONS, Question } from "./types";
+import {
+  Answer,
+  GameState,
+  Horse,
+  MODEL_OPTIONS,
+  Question,
+  AttemptedQuestion,
+} from "./types";
 import RaceTrack from "./components/RaceTrack";
 import HorseSelector from "./components/HorseSelector";
 import QAContainer from "./components/QAContainer";
@@ -96,6 +100,10 @@ function App() {
 
   const [isRaceStarted, setIsRaceStarted] = useState(false);
 
+  const [attemptedQuestions, setAttemptedQuestions] = useState<
+    AttemptedQuestion[]
+  >([]);
+
   useEffect(() => {
     if (!isRaceStarted) return;
 
@@ -136,6 +144,19 @@ function App() {
   }, [isRaceStarted, gameState.horses]);
 
   const submitAnswer = async (horseId: number, question: Question) => {
+    // Check if this horse has already attempted this question
+    const hasAttempted = attemptedQuestions.some(
+      (attempt) =>
+        attempt.horseId === horseId && attempt.questionId === question.id
+    );
+
+    if (hasAttempted) {
+      // console.log(
+      //   `Horse ${horseId} has already attempted question ${question.id}`
+      // );
+      return;
+    }
+
     const horse = gameState.horses.find((h) => h.id === horseId);
 
     if (
@@ -154,6 +175,12 @@ function App() {
     }
 
     try {
+      // Mark this question as attempted before making the API call
+      setAttemptedQuestions((prev) => [
+        ...prev,
+        { horseId, questionId: question.id },
+      ]);
+
       setGameState((prev) => ({
         ...prev,
         horses: prev.horses.map((h) =>
