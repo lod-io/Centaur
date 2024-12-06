@@ -42,12 +42,18 @@ const QAContainer: React.FC<QAContainerProps> = ({
   useEffect(() => {
     if (scrollRef.current && answers.length > 0) {
       setTimeout(() => {
-        const latestAnsweredQuestionId = answers[answers.length - 1].questionId;
-
-        console.log(latestAnsweredQuestionId);
+        const latestAnswer = answers.reduce((latest, current) => {
+          const currentQuestionIndex = questions.findIndex(
+            (q) => q.id === current.questionId
+          );
+          const latestQuestionIndex = questions.findIndex(
+            (q) => q.id === latest.questionId
+          );
+          return currentQuestionIndex > latestQuestionIndex ? current : latest;
+        }, answers[0]);
 
         const questionElement = scrollRef.current?.querySelector(
-          `[data-question-id="${latestAnsweredQuestionId}"]`
+          `[data-question-id="${latestAnswer.questionId}"]`
         );
 
         if (questionElement) {
@@ -55,7 +61,7 @@ const QAContainer: React.FC<QAContainerProps> = ({
         }
       }, 100);
     }
-  }, [answers]);
+  }, [answers, questions]);
 
   return (
     <QAContainerStyled elevation={3}>

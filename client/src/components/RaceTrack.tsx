@@ -75,9 +75,11 @@ const StartLine = styled(Box)({
   top: 0,
   bottom: 0,
   width: "4px",
+  height: "100%",
+  zIndex: 1,
   background: `repeating-linear-gradient(
     to bottom,
-    #000 0px,
+    #000 0,
     #000 10px,
     #fff 10px,
     #fff 20px
@@ -90,9 +92,11 @@ const FinishLine = styled(Box)({
   top: 0,
   bottom: 0,
   width: "4px",
+  height: "100%",
+  zIndex: 1,
   background: `repeating-linear-gradient(
     to bottom,
-    #000 0px,
+    #000 0,
     #000 10px,
     #fff 10px,
     #fff 20px
