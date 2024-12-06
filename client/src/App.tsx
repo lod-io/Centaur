@@ -23,7 +23,7 @@ const darkTheme = createTheme({
   palette: {
     mode: "dark",
     primary: {
-      main: "#22577A",
+      main: "#3A4D39",
     },
     background: {
       default: "#1a1a1a",
@@ -296,8 +296,12 @@ function App() {
       <div
         style={{
           padding: isSmallScreen ? "10px" : "25px",
-          height: "100vh",
+          minHeight: "100vh",
           maxWidth: "100vw",
+          display: "flex",
+          flexDirection: "row",
+          justifyContent: "center",
+          alignItems: "center",
         }}
       >
         <Stack
@@ -306,16 +310,16 @@ function App() {
           sx={{
             "& > :first-of-type": { flex: 3.5 }, // Game controls take 1 part
             "& > :last-child": { flex: 1 }, // QAContainer takes 3 parts
+            justifyContent: "center",
+            alignItems: "center",
           }}
         >
           <Stack spacing={3} alignItems="center">
             <Stack direction="column" spacing={0} alignItems="center">
               <Typography
-                variant="h1"
+                variant={isSmallScreen ? "h4" : "h3"}
                 sx={{
                   color: darkTheme.palette.text.primary,
-                  margin: 0,
-                  fontSize: "2.5rem",
                   fontWeight: "bold",
                   textAlign: "center",
                 }}

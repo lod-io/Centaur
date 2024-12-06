@@ -75,8 +75,13 @@ const StartLine = styled(Box)({
   top: 0,
   bottom: 0,
   width: "4px",
-  background:
-    "repeating-linear-gradient(0deg, #000, #000 10px, #fff 10px, #fff 20px)",
+  background: `repeating-linear-gradient(
+    to bottom,
+    #000 0px,
+    #000 10px,
+    #fff 10px,
+    #fff 20px
+  )`,
 });
 
 const FinishLine = styled(Box)({
@@ -85,8 +90,13 @@ const FinishLine = styled(Box)({
   top: 0,
   bottom: 0,
   width: "4px",
-  background:
-    "repeating-linear-gradient(0deg, #000, #000 10px, #fff 10px, #fff 20px)",
+  background: `repeating-linear-gradient(
+    to bottom,
+    #000 0px,
+    #000 10px,
+    #fff 10px,
+    #fff 20px
+  )`,
 });
 
 const CenterText = styled(Box)({
@@ -121,7 +131,7 @@ const RaceTrack: React.FC<RaceTrackProps> = ({ horses }) => {
             gridRow: horse.id,
             gridColumn: 6, // Middle column (6 of 11)
             whiteSpace: "nowrap",
-            color: "#101c0f",
+            color: theme.palette.text.primary,
             fontWeight: "semibold",
             fontSize: isSmallScreen ? "0.8em" : "1.5em",
           }}
