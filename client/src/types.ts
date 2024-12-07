@@ -40,27 +40,29 @@ export interface ModelOption {
 }
 
 export const MODEL_OPTIONS: ModelOption[] = [
-  { name: "Gemini 1.5 Flash", value: "gemini-1.5-flash" },
-  { name: "Gemini 1.5 Flash 8B", value: "gemini-1.5-flash-8b" },
-  { name: "Gemma 2 9B", value: "gemma-2-9b" },
-  { name: "Gemma 7B", value: "gemma-7b" },
-  { name: "GPT-4o", value: "gpt-4o" },
-  { name: "GPT-4 Turbo", value: "gpt-4-turbo" },
-  { name: "GPT-4o Mini", value: "gpt-4o-mini" },
-  { name: "GPT-4o Mini (2024-07-18)", value: "gpt-4o-mini-2024-07-18" },
-  { name: "Claude 3 Opus", value: "claude-3-opus-latest" },
-  { name: "Claude 3 Haiku", value: "claude-3-haiku-20240307" },
-  { name: "Claude 3.5 Sonnet", value: "claude-3-5-sonnet-latest" },
-  { name: "Meta Llama 3 70B", value: "meta-llama-3-70b" },
-  { name: "Meta Llama 3 8B", value: "meta-llama-3-8b" },
-  { name: "Llama 3.1 70B", value: "llama-3-1-70b" },
-  { name: "Llama 3.2 3B", value: "llama-3-2-3b" },
-  { name: "Llama 3.1 8B", value: "llama-3-1-8b" },
-  { name: "Llama 3.1 405B", value: "llama-3-1-405b" },
-  { name: "Mixtral 8x7B", value: "mixtral-8x7b" },
-  { name: "Open Mixtral 8x7B", value: "open-mixtral-8x7b" },
-  { name: "Open Mixtral 8x22B", value: "open-mixtral-8x22b" },
-  { name: "Open Mistral 7B", value: "open-mistral-7b" },
+  { name: "Claude 3 Haiku", value: "claude-3-haiku-20240307" }, // Good
+  { name: "Claude 3 Opus", value: "claude-3-opus-latest" }, // Good
+  { name: "Claude 3.5 Sonnet", value: "claude-3-5-sonnet-latest" }, // Good
+  { name: "Gemini 1.5 Flash", value: "gemini-1.5-flash" }, // Good
+  { name: "Gemini 1.5 Flash 8B", value: "gemini-1.5-flash-8b" }, // Good
+  { name: "GPT-4o", value: "gpt-4o" }, // Good
+  { name: "GPT-4 Turbo", value: "gpt-4-turbo" }, // Good
+  { name: "GPT-4o Mini", value: "gpt-4o-mini" }, // Good
+  { name: "Llama 3.1 8B Instruct", value: "Meta-Llama-3.1-8B-Instruct" }, // Good
+  { name: "Llama 3.1 8B Instant", value: "llama-3.1-8b-instant" }, // Good
+  // { name: "Llama 3.1 8B FireworksAI", value: "accounts/fireworks/models/llama-v3p1-8b-instruct" }, // Good
+  // { name: "Llama 3.1 8B TogetherAI", value: "meta-llama/Meta-Llama-3.1-8B-Instruct-Turbo" }, // Good
+  // { name: "Llama 3.1 70B Groq", value: "llama-3.1-70b-versatile" }, // Good
+  { name: "Llama 3.1 70B Instruct", value: "Meta-Llama-3.1-70B-Instruct" }, // Good
+  { name: "Llama 3.1 70B Instruct Turbo", value: "meta-llama/Meta-Llama-3.1-70B-Instruct-Turbo" }, // Good
+  // { name: "Llama 3.1 70B FireworksAI", value: "accounts/fireworks/models/llama-v3p1-70b-instruct" }, // Good
+  // { name: "Llama 3.1 405B FireworksAI", value: "accounts/fireworks/models/llama-v3p1-405b-instruct" },
+  // { name: "Llama 3.1 405B Instruct", value: "Meta-Llama-3.1-405B-Instruct" }, // Rate limited
+  { name: "Llama 3.1 405B Instruct Turbo", value: "meta-llama/Meta-Llama-3.1-405B-Instruct-Turbo" }, // Good
+  // { name: "Mixtral 8x7B", value: "mixtral-8x7b-32768" }, // So-so
+  // { name: "Open Mixtral 8x7B", value: "open-mixtral-8x7b" }, // So-so
+  // { name: "Open Mixtral 8x22B", value: "open-mixtral-8x22b" }, // Rate limited
+  // { name: "Open Mistral 7B", value: "open-mistral-7b" } // So-so
 ];
 
 export type QuestionBankEntry = Omit<Question, 'column'>; 

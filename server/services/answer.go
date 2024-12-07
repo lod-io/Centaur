@@ -39,33 +39,31 @@ func (s *AnswerService) generateAnswer(model string, question models.Question) s
 
 	url := "https://api.clod.io/v1/chat/completions"
 
-	systemPrompt := `You are a choice selector. Your ONLY job is to select ONE answer from the provided choices.
-CRITICAL RULES:
-1. You MUST select EXACTLY ONE of the provided choices
-2. Your response must be the exact text of your chosen answer - nothing more
-3. The selected choice MUST be an exact match to one of the provided choices
-4. Do not explain your choice or add any other text
-5. If unsure, make your best guess - you MUST choose one
+	instructions := `You are a choice selector. Your ONLY job is to select ONE answer from the provided choices.
+		CRITICAL RULES:
+		1. You MUST select EXACTLY ONE of the provided choices
+		2. Your response must be the exact text of your chosen answer - nothing more
+		3. The selected choice MUST be an exact match to one of the provided choices
+		4. Do not explain your choice or add any other text
+		5. If unsure, make your best guess - you MUST choose one`
 
-Example input:
-Question: What is the capital of France?
-Choices: London, Paris, Berlin
+	userPrompt := fmt.Sprintf(`%s
 
-Example response:
-Paris
+		Question: %s
+		Choices: %s
 
-REMEMBER: Respond with exactly one of the provided choices - no explanation, just the choice.`
+		Remember: Respond with exactly one of the provided choices - no explanation, just the choice.`,
+		instructions,
+		question.Content,
+		strings.Join(question.Choices, ", "))
 
 	// Prepare the request payload
 	payload := map[string]interface{}{
 		"model": model,
 		"messages": []map[string]string{
-			{"role": "system", "content": systemPrompt},
-			{"role": "user", "content": fmt.Sprintf("Question: %s\nChoices: %s",
-				question.Content,
-				strings.Join(question.Choices, ", "))},
+			{"role": "user", "content": userPrompt},
 		},
-		"max_tokens": 80,
+		"ensure_success": false,
 	}
 	payloadBytes, err := json.Marshal(payload)
 	if err != nil {
@@ -107,13 +105,14 @@ REMEMBER: Respond with exactly one of the provided choices - no explanation, jus
 		return "Error generating answer"
 	}
 
-	log.Printf("\n\nResponse: %v", response)
+	log.Printf("\n\nRaw response from %s: %v\n\n", model, response)
 	// Extract the answer from the response
 	if choices, ok := response["choices"].([]interface{}); ok && len(choices) > 0 {
 		if choice, ok := choices[0].(map[string]interface{}); ok {
 			if message, ok := choice["message"].(map[string]interface{}); ok {
 				if content, ok := message["content"].(string); ok {
 					// Clean the content of any whitespace or special characters
+					log.Printf("\n\nModel: %s's response: %s\n\n", model, content)
 					cleanContent := strings.Trim(content, "`\n\r\t ")
 
 					// Try direct matching with the choices

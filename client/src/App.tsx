@@ -257,7 +257,7 @@ function App() {
                     return horse;
                   }),
                 }));
-              }, 1000);
+              }, 5000);
               return { ...h, isProcessing: false, isWaiting: true };
             }
           }
