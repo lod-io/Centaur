@@ -20,11 +20,13 @@ import { Question } from "../types";
 interface HeaderButtonsProps {
   textColor: string;
   onCustomQuestionsSubmit?: (questions: Question[]) => void;
+  onPenaltyTimeChange?: (seconds: number) => void;
 }
 
 export const HeaderButtons = ({
   textColor,
   onCustomQuestionsSubmit,
+  onPenaltyTimeChange,
 }: HeaderButtonsProps) => {
   const {
     clodAnchorEl,
@@ -161,6 +163,7 @@ export const HeaderButtons = ({
         anchorEl={tuneAnchorEl}
         onClose={handleTunePopoverClose}
         onCustomQuestionsSubmit={onCustomQuestionsSubmit}
+        onPenaltyTimeChange={onPenaltyTimeChange}
       />
     </Stack>
   );

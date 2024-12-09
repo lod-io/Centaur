@@ -10,6 +10,7 @@ import {
   AccordionSummary,
   AccordionDetails,
   useTheme,
+  Slider,
 } from "@mui/material";
 import { Close, ExpandMore } from "@mui/icons-material";
 import { useState } from "react";
@@ -20,6 +21,7 @@ interface CustomizePopoverProps {
   anchorEl: HTMLElement | null;
   onClose: () => void;
   onCustomQuestionsSubmit?: (questions: Question[]) => void;
+  onPenaltyTimeChange?: (seconds: number) => void;
 }
 
 export const CustomizePopover = ({
@@ -27,6 +29,7 @@ export const CustomizePopover = ({
   anchorEl,
   onClose,
   onCustomQuestionsSubmit,
+  onPenaltyTimeChange,
 }: CustomizePopoverProps) => {
   const theme = useTheme();
 
@@ -39,6 +42,8 @@ export const CustomizePopover = ({
       decoy3: "",
     })
   );
+
+  const [penaltyTime, setPenaltyTime] = useState(3);
 
   const updateQuestion = (index: number, field: string, value: string) => {
     const newQuestions = [...customQuestions];
@@ -75,6 +80,15 @@ export const CustomizePopover = ({
       [newArray[i], newArray[j]] = [newArray[j], newArray[i]];
     }
     return newArray;
+  };
+
+  const handlePenaltyTimeChange = (
+    _event: Event,
+    newValue: number | number[]
+  ) => {
+    const value = newValue as number;
+    setPenaltyTime(value);
+    onPenaltyTimeChange?.(value);
   };
 
   return (
@@ -126,7 +140,7 @@ export const CustomizePopover = ({
             aria-controls="custom-questions-content"
             id="custom-questions-header"
           >
-            <Typography variant="subtitle1">Custom Questions 🎨</Typography>
+            <Typography variant="subtitle1">Questions 📝</Typography>
           </AccordionSummary>
           <AccordionDetails>
             <Typography variant="body2" color="text.secondary" sx={{ mb: 2 }}>
@@ -208,6 +222,36 @@ export const CustomizePopover = ({
             >
               Use These Questions
             </Button>
+          </AccordionDetails>
+        </Accordion>
+
+        <Accordion>
+          <AccordionSummary
+            expandIcon={<ExpandMore />}
+            aria-controls="penalty-time-content"
+            id="penalty-time-header"
+          >
+            <Typography variant="subtitle1">Penalty Time ⏰</Typography>
+          </AccordionSummary>
+          <AccordionDetails>
+            <Typography variant="body2" color="text.secondary" sx={{ mb: 2 }}>
+              Set how long horses must wait after an incorrect answer (in
+              seconds)
+            </Typography>
+            <Slider
+              value={penaltyTime}
+              onChange={handlePenaltyTimeChange}
+              aria-labelledby="penalty-time-slider"
+              valueLabelDisplay="auto"
+              step={1}
+              marks
+              min={1}
+              max={10}
+              sx={{ maxWidth: "300px" }}
+            />
+            <Typography variant="body2" color="text.secondary" sx={{ mt: 1 }}>
+              Current penalty: {penaltyTime} seconds
+            </Typography>
           </AccordionDetails>
         </Accordion>
 

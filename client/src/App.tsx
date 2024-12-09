@@ -108,6 +108,8 @@ function App() {
     AttemptedQuestion[]
   >([]);
 
+  const [penaltyTime, setPenaltyTime] = useState(3);
+
   useEffect(() => {
     if (!isRaceStarted) return;
 
@@ -261,7 +263,7 @@ function App() {
                     return horse;
                   }),
                 }));
-              }, 3000);
+              }, penaltyTime * 1000);
               return { ...h, isProcessing: false, isWaiting: true };
             }
           }
@@ -404,6 +406,7 @@ function App() {
               <HeaderButtons
                 textColor={darkTheme.palette.text.primary}
                 onCustomQuestionsSubmit={handleCustomQuestionsSubmit}
+                onPenaltyTimeChange={(seconds) => setPenaltyTime(seconds)}
               />
             </Stack>
             <HorseSelector
