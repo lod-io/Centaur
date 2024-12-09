@@ -41,8 +41,8 @@ export interface ModelOption {
 
 export const MODEL_OPTIONS: ModelOption[] = [
   { name: "Claude 3 Haiku", value: "claude-3-haiku-20240307" }, // Good
-  { name: "Claude 3 Opus", value: "claude-3-opus-latest" }, // Good
-  { name: "Claude 3.5 Sonnet", value: "claude-3-5-sonnet-latest" }, // Good
+  { name: "Claude 3 Opus", value: "claude-3-opus-latest" }, // Someimes delays
+  { name: "Claude 3.5 Sonnet", value: "claude-3-5-sonnet-latest" }, // Sometimes delays
   { name: "Gemini 1.5 Flash", value: "gemini-1.5-flash" }, // Good
   { name: "Gemini 1.5 Flash 8B", value: "gemini-1.5-flash-8b" }, // Good
   { name: "GPT-4o", value: "gpt-4o" }, // Good
@@ -59,10 +59,10 @@ export const MODEL_OPTIONS: ModelOption[] = [
   // { name: "Llama 3.1 405B FireworksAI", value: "accounts/fireworks/models/llama-v3p1-405b-instruct" },
   // { name: "Llama 3.1 405B Instruct", value: "Meta-Llama-3.1-405B-Instruct" }, // Rate limited
   { name: "Llama 3.1 405B Instruct Turbo", value: "meta-llama/Meta-Llama-3.1-405B-Instruct-Turbo" }, // Good
-  // { name: "Mixtral 8x7B", value: "mixtral-8x7b-32768" }, // So-so
-  // { name: "Open Mixtral 8x7B", value: "open-mixtral-8x7b" }, // So-so
+  // { name: "Mixtral 8x7B", value: "mixtral-8x7b-32768" }, // Inconsistent JSON output
+  // { name: "Open Mixtral 8x7B", value: "open-mixtral-8x7b" }, // Inconsistent JSON output
   // { name: "Open Mixtral 8x22B", value: "open-mixtral-8x22b" }, // Rate limited
-  // { name: "Open Mistral 7B", value: "open-mistral-7b" } // So-so
+  // { name: "Open Mistral 7B", value: "open-mistral-7b" } // Inconsistent JSON output
 ];
 
 export type QuestionBankEntry = Omit<Question, 'column'>; 

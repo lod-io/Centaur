@@ -257,7 +257,7 @@ function App() {
                     return horse;
                   }),
                 }));
-              }, 5000);
+              }, 3000);
               return { ...h, isProcessing: false, isWaiting: true };
             }
           }
@@ -317,6 +317,37 @@ function App() {
 
   const isSmallScreen = useMediaQuery(darkTheme.breakpoints.down("md")); // lg is typically 1200px
 
+  const handleRestart = () => {
+    // Reset game state
+    setGameState(() => {
+      const selectedQuestions = shuffleArray(questionBank)
+        .slice(0, 10)
+        .map((q, index) => ({
+          ...q,
+          column: index,
+        }));
+
+      return {
+        questions: selectedQuestions,
+        answers: [],
+        horses: gameState.horses.map((horse) => ({
+          ...horse,
+          position: 0,
+          isProcessing: false,
+          isWaiting: false,
+          finishTime: undefined,
+        })),
+        currentColumn: 0,
+      };
+    });
+
+    // Reset attempted questions
+    setAttemptedQuestions([]);
+
+    // Reset race state
+    setIsRaceStarted(false);
+  };
+
   return (
     <ThemeProvider theme={darkTheme}>
       <CssBaseline />
@@ -361,18 +392,18 @@ function App() {
               onNameChange={handleNameChange}
             />
             <RaceTrack horses={gameState.horses} />
-            {!isRaceStarted && (
-              <Button
-                variant="contained"
-                color="primary"
-                size="large"
-                onClick={() => setIsRaceStarted(true)}
-                disabled={!canStartRace()}
-                sx={{ mt: 2, textTransform: "none" }}
-              >
-                Begin Race 🏆
-              </Button>
-            )}
+            <Button
+              variant="contained"
+              color="primary"
+              size="large"
+              onClick={
+                isRaceStarted ? handleRestart : () => setIsRaceStarted(true)
+              }
+              disabled={!isRaceStarted && !canStartRace()}
+              sx={{ mt: 2, textTransform: "none" }}
+            >
+              {isRaceStarted ? "Restart 🔄" : "Begin Race 🏆"}
+            </Button>
           </Stack>
           <QAContainer
             questions={gameState.questions}
