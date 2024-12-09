@@ -3,7 +3,7 @@ import { useState } from 'react';
 export const usePopovers = () => {
   const [clodAnchorEl, setClodAnchorEl] = useState<null | HTMLElement>(null);
   const [instructionsAnchorEl, setInstructionsAnchorEl] = useState<null | HTMLElement>(null);
-
+  const [tuneAnchorEl, setTuneAnchorEl] = useState<null | HTMLElement>(null);
   const handleClodPopoverOpen = (event: React.MouseEvent<HTMLElement>) => {
     setClodAnchorEl(event.currentTarget);
   };
@@ -20,6 +20,14 @@ export const usePopovers = () => {
     setInstructionsAnchorEl(null);
   };
 
+  const handleTunePopoverOpen = (event: React.MouseEvent<HTMLElement>) => {
+    setTuneAnchorEl(event.currentTarget);
+  };
+
+  const handleTunePopoverClose = () => {
+    setTuneAnchorEl(null);
+  };
+
   return {
     clodAnchorEl,
     instructionsAnchorEl,
@@ -29,5 +37,9 @@ export const usePopovers = () => {
     handleInstructionsPopoverClose,
     isClodOpen: Boolean(clodAnchorEl),
     isInstructionsOpen: Boolean(instructionsAnchorEl),
+    tuneAnchorEl,
+    handleTunePopoverOpen,
+    handleTunePopoverClose,
+    isTuneOpen: Boolean(tuneAnchorEl),
   };
 }; 

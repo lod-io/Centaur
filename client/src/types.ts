@@ -71,3 +71,11 @@ export type AttemptedQuestion = {
   horseId: number;
   questionId: string;
 };
+
+export interface CustomQuestion {
+  question: string;
+  correctAnswer: string;
+  decoy1: string;
+  decoy2: string;
+  decoy3: string;
+}

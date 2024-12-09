@@ -348,6 +348,19 @@ function App() {
     setIsRaceStarted(false);
   };
 
+  const handleCustomQuestionsSubmit = (customQuestions: Question[]) => {
+    if (!isRaceStarted) {
+      setGameState((prev) => ({
+        ...prev,
+        questions: customQuestions,
+      }));
+    } else {
+      alert(
+        "Please wait for the current race to finish before changing questions"
+      );
+    }
+  };
+
   return (
     <ThemeProvider theme={darkTheme}>
       <CssBaseline />
@@ -384,7 +397,10 @@ function App() {
               >
                 Centaur: AI Horse Racing
               </Typography>
-              <HeaderButtons textColor={darkTheme.palette.text.primary} />
+              <HeaderButtons
+                textColor={darkTheme.palette.text.primary}
+                onCustomQuestionsSubmit={handleCustomQuestionsSubmit}
+              />
             </Stack>
             <HorseSelector
               horses={gameState.horses}
