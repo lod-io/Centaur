@@ -8,6 +8,8 @@ import {
   TextField,
   Grid,
   IconButton,
+  useTheme,
+  useMediaQuery,
 } from "@mui/material";
 import { GitHub, Cloud, Notes, Tune, Close } from "@mui/icons-material";
 import { usePopovers } from "../hooks/usePopovers";
@@ -37,6 +39,9 @@ export const HeaderButtons = ({
     handleTunePopoverClose,
     isTuneOpen,
   } = usePopovers();
+
+  const theme = useTheme();
+  const isSmallScreen = useMediaQuery(theme.breakpoints.down("sm"));
 
   const [customQuestions, setCustomQuestions] = useState(
     Array(10).fill({
@@ -86,8 +91,14 @@ export const HeaderButtons = ({
   };
 
   return (
-    <Stack direction="row" spacing={2} alignItems="center">
+    <Stack
+      direction={isSmallScreen ? "column" : "row"}
+      spacing={1}
+      alignItems={isSmallScreen ? "stretch" : "center"}
+      sx={{ width: isSmallScreen ? "100%" : "auto" }}
+    >
       <Button
+        fullWidth={isSmallScreen}
         startIcon={<Notes />}
         onClick={handleInstructionsPopoverOpen}
         sx={{
@@ -126,6 +137,7 @@ export const HeaderButtons = ({
         </Typography>
       </Popover>
       <Button
+        fullWidth={isSmallScreen}
         startIcon={<GitHub />}
         href="https://github.com/lod-io/centaur"
         target="_blank"
@@ -137,6 +149,7 @@ export const HeaderButtons = ({
         GitHub
       </Button>
       <Button
+        fullWidth={isSmallScreen}
         startIcon={<Cloud />}
         onClick={handleClodPopoverOpen}
         sx={{
@@ -179,6 +192,7 @@ export const HeaderButtons = ({
         </Typography>
       </Popover>
       <Button
+        fullWidth={isSmallScreen}
         startIcon={<Tune />}
         onClick={handleTunePopoverOpen}
         sx={{
@@ -202,7 +216,9 @@ export const HeaderButtons = ({
           horizontal: "center",
         }}
         sx={{
-          maxWidth: "1300px",
+          "& .MuiPopover-paper": {
+            width: "800px",
+          },
         }}
       >
         <Paper
@@ -213,6 +229,8 @@ export const HeaderButtons = ({
             flexDirection: "column",
             alignItems: "center",
             position: "relative",
+            width: "100%",
+            minHeight: "500px",
           }}
         >
           <IconButton

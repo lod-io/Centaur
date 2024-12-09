@@ -48,6 +48,10 @@ function shuffleArray<T>(array: T[]): T[] {
   return newArray;
 }
 
+const isRaceComplete = (horses: Horse[]) => {
+  return horses.every((horse) => horse.position >= 10);
+};
+
 function App() {
   const [gameState, setGameState] = useState<GameState>(() => {
     const selectedQuestions = shuffleArray(questionBank)
@@ -415,7 +419,10 @@ function App() {
               onClick={
                 isRaceStarted ? handleRestart : () => setIsRaceStarted(true)
               }
-              disabled={!isRaceStarted && !canStartRace()}
+              disabled={
+                (!isRaceStarted && !canStartRace()) ||
+                (isRaceStarted && !isRaceComplete(gameState.horses))
+              }
               sx={{ mt: 2, textTransform: "none" }}
             >
               {isRaceStarted ? "Restart 🔄" : "Begin Race 🏆"}

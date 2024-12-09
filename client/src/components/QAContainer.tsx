@@ -1,4 +1,12 @@
-import { Box, Paper, Stack, styled, Divider } from "@mui/material";
+import {
+  Box,
+  Paper,
+  Stack,
+  styled,
+  Divider,
+  useMediaQuery,
+  useTheme,
+} from "@mui/material";
 import { Answer, Question, Horse } from "../types";
 import { useEffect, useRef } from "react";
 
@@ -37,10 +45,11 @@ const QAContainer: React.FC<QAContainerProps> = ({
   answers,
   horses,
 }) => {
+  const theme = useTheme();
   const scrollRef = useRef<HTMLDivElement>(null);
-
+  const isSmallScreen = useMediaQuery(theme.breakpoints.down("sm"));
   useEffect(() => {
-    if (scrollRef.current && answers.length > 0) {
+    if (scrollRef.current && answers.length > 0 && !isSmallScreen) {
       setTimeout(() => {
         const latestAnswer = answers.reduce((latest, current) => {
           const currentQuestionIndex = questions.findIndex(
