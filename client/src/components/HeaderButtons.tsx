@@ -14,6 +14,7 @@ import {
 import { GitHub, Cloud, Notes, Tune, Close } from "@mui/icons-material";
 import { usePopovers } from "../hooks/usePopovers";
 import { useState } from "react";
+import { CustomizePopover } from "./CustomizePopover";
 import { Question } from "../types";
 
 interface HeaderButtonsProps {
@@ -42,53 +43,6 @@ export const HeaderButtons = ({
 
   const theme = useTheme();
   const isSmallScreen = useMediaQuery(theme.breakpoints.down("sm"));
-
-  const [customQuestions, setCustomQuestions] = useState(
-    Array(10).fill({
-      question: "",
-      correctAnswer: "",
-      decoy1: "",
-      decoy2: "",
-      decoy3: "",
-    })
-  );
-
-  const updateQuestion = (index: number, field: string, value: string) => {
-    const newQuestions = [...customQuestions];
-    newQuestions[index] = { ...newQuestions[index], [field]: value };
-    setCustomQuestions(newQuestions);
-  };
-
-  const handleSubmitQuestions = () => {
-    const isValid = customQuestions.every(
-      (q) => q.question && q.correctAnswer && q.decoy1 && q.decoy2 && q.decoy3
-    );
-
-    if (!isValid) {
-      alert("Please fill in all fields for all 10 questions");
-      return;
-    }
-
-    const formattedQuestions: Question[] = customQuestions.map((q, index) => ({
-      id: `custom-${index + 1}`,
-      content: q.question,
-      answer: q.correctAnswer,
-      choices: shuffleArray([q.correctAnswer, q.decoy1, q.decoy2, q.decoy3]),
-      column: index,
-    }));
-
-    onCustomQuestionsSubmit?.(formattedQuestions);
-    handleTunePopoverClose();
-  };
-
-  const shuffleArray = <T,>(array: T[]): T[] => {
-    const newArray = [...array];
-    for (let i = newArray.length - 1; i > 0; i--) {
-      const j = Math.floor(Math.random() * (i + 1));
-      [newArray[i], newArray[j]] = [newArray[j], newArray[i]];
-    }
-    return newArray;
-  };
 
   return (
     <Stack
@@ -202,131 +156,12 @@ export const HeaderButtons = ({
       >
         Customize
       </Button>
-      <Popover
+      <CustomizePopover
         open={isTuneOpen}
         anchorEl={tuneAnchorEl}
         onClose={handleTunePopoverClose}
-        anchorReference="anchorPosition"
-        anchorPosition={{
-          top: window.innerHeight / 2,
-          left: window.innerWidth / 2,
-        }}
-        transformOrigin={{
-          vertical: "center",
-          horizontal: "center",
-        }}
-        sx={{
-          "& .MuiPopover-paper": {
-            width: "800px",
-          },
-        }}
-      >
-        <Paper
-          sx={{
-            p: 3,
-            overflow: "auto",
-            display: "flex",
-            flexDirection: "column",
-            alignItems: "center",
-            position: "relative",
-            width: "100%",
-            minHeight: "500px",
-          }}
-        >
-          <IconButton
-            onClick={handleTunePopoverClose}
-            sx={{
-              position: "absolute",
-              right: 8,
-              top: 8,
-            }}
-          >
-            <Close />
-          </IconButton>
-          <Typography variant="h6" gutterBottom>
-            Custom Questions 🎨
-          </Typography>
-          <Typography variant="body2" color="text.secondary" sx={{ mb: 2 }}>
-            Add 10 custom questions! Each question needs one correct answer and
-            three decoy answers.
-          </Typography>
-
-          {customQuestions.map((q, index) => (
-            <Paper key={index} elevation={2} sx={{ p: 2, mb: 2 }}>
-              <Grid container spacing={2}>
-                <Grid item xs={12}>
-                  <TextField
-                    fullWidth
-                    label={`Question ${index + 1}`}
-                    value={q.question}
-                    onChange={(e) =>
-                      updateQuestion(index, "question", e.target.value)
-                    }
-                  />
-                </Grid>
-                <Grid item xs={12} sm={6}>
-                  <TextField
-                    fullWidth
-                    label="Correct Answer"
-                    value={q.correctAnswer}
-                    onChange={(e) =>
-                      updateQuestion(index, "correctAnswer", e.target.value)
-                    }
-                  />
-                </Grid>
-                <Grid item xs={12} sm={6}>
-                  <TextField
-                    fullWidth
-                    label="Decoy Answer 1"
-                    value={q.decoy1}
-                    onChange={(e) =>
-                      updateQuestion(index, "decoy1", e.target.value)
-                    }
-                  />
-                </Grid>
-                <Grid item xs={12} sm={6}>
-                  <TextField
-                    fullWidth
-                    label="Decoy Answer 2"
-                    value={q.decoy2}
-                    onChange={(e) =>
-                      updateQuestion(index, "decoy2", e.target.value)
-                    }
-                  />
-                </Grid>
-                <Grid item xs={12} sm={6}>
-                  <TextField
-                    fullWidth
-                    label="Decoy Answer 3"
-                    value={q.decoy3}
-                    onChange={(e) =>
-                      updateQuestion(index, "decoy3", e.target.value)
-                    }
-                  />
-                </Grid>
-              </Grid>
-            </Paper>
-          ))}
-
-          <Button
-            variant="contained"
-            color="primary"
-            fullWidth
-            onClick={handleSubmitQuestions}
-            sx={{ mt: 1, textTransform: "none", maxWidth: "200px" }}
-            disabled={customQuestions.some(
-              (q) =>
-                !q.question ||
-                !q.correctAnswer ||
-                !q.decoy1 ||
-                !q.decoy2 ||
-                !q.decoy3
-            )}
-          >
-            Use These Questions
-          </Button>
-        </Paper>
-      </Popover>
+        onCustomQuestionsSubmit={onCustomQuestionsSubmit}
+      />
     </Stack>
   );
 };
