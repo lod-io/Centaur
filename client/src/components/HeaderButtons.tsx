@@ -12,10 +12,14 @@ import { GitHub, Cloud, Notes, Tune, Share } from "@mui/icons-material";
 import {
   TwitterShareButton,
   LinkedinShareButton,
-  RedditShareButton,
+  FacebookShareButton,
+  TelegramShareButton,
+  WhatsappShareButton,
   XIcon,
   LinkedinIcon,
-  RedditIcon,
+  FacebookIcon,
+  TelegramIcon,
+  WhatsappIcon,
 } from "react-share";
 import { usePopovers } from "../hooks/usePopovers";
 import { CustomizePopover } from "./CustomizePopover";
@@ -58,7 +62,6 @@ export const HeaderButtons = ({
   const shareTitle = "Check out Centaur - The AI Horse Racing Game 🦄";
   const shareDescription =
     "Race different AI models against each other and watch as AI horses compete by answering questions in real-time.";
-  const shareSource = "Centaur Game";
 
   // Add this before the return statement
   const iconSize = 32;
@@ -225,16 +228,13 @@ export const HeaderButtons = ({
               borderRadius={iconBorderRadius}
             />
           </LinkedinShareButton>
-          <RedditShareButton
-            url={shareUrl}
-            title={shareTitle + "\n\n" + shareDescription}
-          >
-            <RedditIcon
+          <FacebookShareButton url={shareUrl} hashtag="#CentaurAI #HorseRacing">
+            <FacebookIcon
               size={iconSize}
               round={true}
               borderRadius={iconBorderRadius}
             />
-          </RedditShareButton>
+          </FacebookShareButton>
         </Stack>
       </Popover>
     </Stack>
