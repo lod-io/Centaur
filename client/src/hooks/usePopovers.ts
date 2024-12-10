@@ -4,6 +4,8 @@ export const usePopovers = () => {
   const [clodAnchorEl, setClodAnchorEl] = useState<null | HTMLElement>(null);
   const [instructionsAnchorEl, setInstructionsAnchorEl] = useState<null | HTMLElement>(null);
   const [tuneAnchorEl, setTuneAnchorEl] = useState<null | HTMLElement>(null);
+  const [shareAnchorEl, setShareAnchorEl] = useState<null | HTMLElement>(null);
+
   const handleClodPopoverOpen = (event: React.MouseEvent<HTMLElement>) => {
     setClodAnchorEl(event.currentTarget);
   };
@@ -28,6 +30,16 @@ export const usePopovers = () => {
     setTuneAnchorEl(null);
   };
 
+  const handleSharePopoverOpen = (event: React.MouseEvent<HTMLButtonElement>) => {
+    setShareAnchorEl(event.currentTarget);
+  };
+
+  const handleSharePopoverClose = () => {
+    setShareAnchorEl(null);
+  };
+
+  const isShareOpen = Boolean(shareAnchorEl);
+
   return {
     clodAnchorEl,
     instructionsAnchorEl,
@@ -41,5 +53,9 @@ export const usePopovers = () => {
     handleTunePopoverOpen,
     handleTunePopoverClose,
     isTuneOpen: Boolean(tuneAnchorEl),
+    shareAnchorEl,
+    handleSharePopoverOpen,
+    handleSharePopoverClose,
+    isShareOpen,
   };
 }; 

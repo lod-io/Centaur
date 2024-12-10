@@ -4,16 +4,20 @@ import {
   Popover,
   Stack,
   Typography,
-  Paper,
-  TextField,
   Grid,
-  IconButton,
   useTheme,
   useMediaQuery,
 } from "@mui/material";
-import { GitHub, Cloud, Notes, Tune, Close } from "@mui/icons-material";
+import { GitHub, Cloud, Notes, Tune, Share } from "@mui/icons-material";
+import {
+  TwitterShareButton,
+  LinkedinShareButton,
+  RedditShareButton,
+  XIcon,
+  LinkedinIcon,
+  RedditIcon,
+} from "react-share";
 import { usePopovers } from "../hooks/usePopovers";
-import { useState } from "react";
 import { CustomizePopover } from "./CustomizePopover";
 import { Question } from "../types";
 
@@ -32,6 +36,7 @@ export const HeaderButtons = ({
     clodAnchorEl,
     instructionsAnchorEl,
     tuneAnchorEl,
+    shareAnchorEl,
     handleClodPopoverOpen,
     handleClodPopoverClose,
     handleInstructionsPopoverOpen,
@@ -41,10 +46,23 @@ export const HeaderButtons = ({
     handleTunePopoverOpen,
     handleTunePopoverClose,
     isTuneOpen,
+    handleSharePopoverOpen,
+    handleSharePopoverClose,
+    isShareOpen,
   } = usePopovers();
 
   const theme = useTheme();
   const isSmallScreen = useMediaQuery(theme.breakpoints.down("sm"));
+
+  const shareUrl = window.location.href;
+  const shareTitle = "Check out Centaur - The AI Horse Racing Game 🦄";
+  const shareDescription =
+    "Race different AI models against each other and watch as AI horses compete by answering questions in real-time.";
+  const shareSource = "Centaur Game";
+
+  // Add this before the return statement
+  const iconSize = 32;
+  const iconBorderRadius = 8;
 
   return (
     <Stack
@@ -165,6 +183,60 @@ export const HeaderButtons = ({
         onCustomQuestionsSubmit={onCustomQuestionsSubmit}
         onPenaltyTimeChange={onPenaltyTimeChange}
       />
+      <Button
+        fullWidth={isSmallScreen}
+        startIcon={<Share />}
+        onClick={handleSharePopoverOpen}
+        sx={{
+          textTransform: "none",
+          color: textColor,
+        }}
+      >
+        Share
+      </Button>
+      <Popover
+        open={isShareOpen}
+        anchorEl={shareAnchorEl}
+        onClose={handleSharePopoverClose}
+        anchorOrigin={{
+          vertical: "bottom",
+          horizontal: "left",
+        }}
+        transformOrigin={{
+          vertical: "top",
+          horizontal: "left",
+        }}
+      >
+        <Stack direction="row" spacing={1} sx={{ p: 2 }}>
+          <TwitterShareButton
+            url={shareUrl}
+            title={shareTitle + "\n\n" + shareDescription}
+          >
+            <XIcon
+              size={iconSize}
+              round={true}
+              borderRadius={iconBorderRadius}
+            />
+          </TwitterShareButton>
+          <LinkedinShareButton url={shareUrl}>
+            <LinkedinIcon
+              size={iconSize}
+              round={true}
+              borderRadius={iconBorderRadius}
+            />
+          </LinkedinShareButton>
+          <RedditShareButton
+            url={shareUrl}
+            title={shareTitle + "\n\n" + shareDescription}
+          >
+            <RedditIcon
+              size={iconSize}
+              round={true}
+              borderRadius={iconBorderRadius}
+            />
+          </RedditShareButton>
+        </Stack>
+      </Popover>
     </Stack>
   );
 };
