@@ -50,12 +50,8 @@ export const MODEL_OPTIONS: ModelOption[] = [
   { name: "GPT-4o Mini", value: "gpt-4o-mini" }, // Good
   { name: "Llama 3.1 8B Instruct", value: "Meta-Llama-3.1-8B-Instruct" }, // Good
   { name: "Llama 3.1 8B Instant", value: "llama-3.1-8b-instant" }, // Good
-  // { name: "Llama 3.1 8B FireworksAI", value: "accounts/fireworks/models/llama-v3p1-8b-instruct" }, // Good
-  // { name: "Llama 3.1 8B TogetherAI", value: "meta-llama/Meta-Llama-3.1-8B-Instruct-Turbo" }, // Good
-  // { name: "Llama 3.1 70B Groq", value: "llama-3.1-70b-versatile" }, // Good
-  { name: "Llama 3.1 70B Instruct", value: "Meta-Llama-3.1-70B-Instruct" }, // Good
-  { name: "Llama 3.1 70B Instruct Turbo", value: "meta-llama/Meta-Llama-3.1-70B-Instruct-Turbo" }, // Good
-  // { name: "Llama 3.1 70B FireworksAI", value: "accounts/fireworks/models/llama-v3p1-70b-instruct" }, // Good
+  // { name: "Llama 3.1 8B FireworksAI", value: "accounts/fireworks/models/llama-v3p1-8b-instruct" }, // Redundant
+  // { name: "Llama 3.1 8B TogetherAI", value: "meta-llama/Meta-Llama-3.1-8B-Instruct-Turbo" }, // Redundant
   // { name: "Llama 3.1 405B FireworksAI", value: "accounts/fireworks/models/llama-v3p1-405b-instruct" },
   // { name: "Llama 3.1 405B Instruct", value: "Meta-Llama-3.1-405B-Instruct" }, // Rate limited
   { name: "Llama 3.1 405B Instruct Turbo", value: "meta-llama/Meta-Llama-3.1-405B-Instruct-Turbo" }, // Good
@@ -63,6 +59,10 @@ export const MODEL_OPTIONS: ModelOption[] = [
   // { name: "Open Mixtral 8x7B", value: "open-mixtral-8x7b" }, // Inconsistent JSON output
   // { name: "Open Mixtral 8x22B", value: "open-mixtral-8x22b" }, // Rate limited
   // { name: "Open Mistral 7B", value: "open-mistral-7b" } // Inconsistent JSON output
+  // { name: "Llama 3.3 70B Instruct", value: "accounts/fireworks/models/llama-v3p3-70b-instruct" }, // Redundant
+  { name: "Llama 3.3 70B Instruct Turbo", value: "meta-llama/Llama-3.3-70B-Instruct-Turbo" },
+  { name: "Llama 3.3 70B Versatile", value: "llama-3.3-70b-versatile" },
+  { name: "Llama 3.3 70B Instruct", value: "Meta-Llama-3.3-70B-Instruct" },
 ];
 
 export type QuestionBankEntry = Omit<Question, 'column'>; 
