@@ -224,38 +224,6 @@ export const CustomizePopover = ({
             </Button>
           </AccordionDetails>
         </Accordion>
-
-        <Accordion>
-          <AccordionSummary
-            expandIcon={<ExpandMore />}
-            aria-controls="penalty-time-content"
-            id="penalty-time-header"
-          >
-            <Typography variant="subtitle1">Penalty Time ⏰</Typography>
-          </AccordionSummary>
-          <AccordionDetails>
-            <Typography variant="body2" color="text.secondary" sx={{ mb: 2 }}>
-              Set how long horses must wait after an incorrect answer (in
-              seconds)
-            </Typography>
-            <Slider
-              value={penaltyTime}
-              onChange={handlePenaltyTimeChange}
-              aria-labelledby="penalty-time-slider"
-              valueLabelDisplay="auto"
-              step={1}
-              marks
-              min={1}
-              max={10}
-              sx={{ maxWidth: "300px" }}
-            />
-            <Typography variant="body2" color="text.secondary" sx={{ mt: 1 }}>
-              Current penalty: {penaltyTime} seconds
-            </Typography>
-          </AccordionDetails>
-        </Accordion>
-
-        {/* You can add more Accordion sections here for other customization options */}
       </Paper>
     </Popover>
   );

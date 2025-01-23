@@ -95,13 +95,11 @@ function App() {
     };
   });
 
-  const [isRaceStarted, setIsRaceStarted] = useState(false);
-
   const [attemptedQuestions, setAttemptedQuestions] = useState<
     AttemptedQuestion[]
   >([]);
 
-  const [penaltyTime, setPenaltyTime] = useState(3);
+  const [isRaceStarted, setIsRaceStarted] = useState(false);
 
   useEffect(() => {
     if (!isRaceStarted) return;
@@ -202,7 +200,7 @@ function App() {
               }
 
               if (result.approved) {
-                const newPosition = Math.min(h.position + 1, 10);
+                const newPosition = Math.min(h.position + 2, 10);
                 return {
                   ...h,
                   position: newPosition,
@@ -211,31 +209,13 @@ function App() {
                   finishTime: newPosition === 10 ? Date.now() : h.finishTime,
                 };
               } else {
-                const currentPosition = h.position;
-                setTimeout(() => {
-                  setGameState((prevState) => ({
-                    ...prevState,
-                    horses: prevState.horses.map((horse) => {
-                      if (horse.id === horseId) {
-                        if (horse.position >= 10) {
-                          return horse;
-                        }
-                        return {
-                          ...horse,
-                          position: Math.min(currentPosition + 1, 10),
-                          isProcessing: false,
-                          isWaiting: false,
-                          finishTime:
-                            currentPosition + 1 === 10
-                              ? Date.now()
-                              : horse.finishTime,
-                        };
-                      }
-                      return horse;
-                    }),
-                  }));
-                }, penaltyTime * 1000);
-                return { ...h, isProcessing: false, isWaiting: true };
+                return {
+                  ...h,
+                  position: Math.min(h.position + 1, 10),
+                  isProcessing: false,
+                  isWaiting: false,
+                  finishTime: h.position + 1 === 10 ? Date.now() : h.finishTime,
+                };
               }
             }
             return h;
@@ -266,7 +246,7 @@ function App() {
         }));
       }
     },
-    [attemptedQuestions, gameState.horses, penaltyTime]
+    [attemptedQuestions, gameState.horses]
   );
 
   useEffect(() => {
@@ -394,7 +374,6 @@ function App() {
               <HeaderButtons
                 textColor={darkTheme.palette.text.primary}
                 onCustomQuestionsSubmit={handleCustomQuestionsSubmit}
-                onPenaltyTimeChange={(seconds) => setPenaltyTime(seconds)}
               />
             </Stack>
             <HorseSelector

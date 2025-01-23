@@ -64,14 +64,6 @@ const SleepOverlay = styled(Box)({
   fontSize: "clamp(0.8em, 1.2vw, 1.3em)",
 });
 
-// const HorseName = styled(Box)({
-//   fontSize: "0.6em",
-//   maxWidth: 60,
-//   overflow: "hidden",
-//   textOverflow: "ellipsis",
-//   whiteSpace: "nowrap",
-// });
-
 const StartLine = styled(Box)({
   position: "absolute",
   left: "9%",
@@ -184,7 +176,6 @@ const RaceTrack: React.FC<RaceTrackProps> = ({ horses }) => {
             <HorseContent>
               {isSmallScreen ? (
                 <Box sx={{ fontSize: "1em" }}>
-                  {horse.isWaiting ? "💤" : null}
                   {overlayIcon ? overlayIcon : null}
                 </Box>
               ) : (
@@ -197,7 +188,6 @@ const RaceTrack: React.FC<RaceTrackProps> = ({ horses }) => {
                   >
                     {horse.emoji}
                   </Box>
-                  {horse.isWaiting && <SleepOverlay>💤</SleepOverlay>}
                   {overlayIcon && <SleepOverlay>{overlayIcon}</SleepOverlay>}
                 </>
               )}
