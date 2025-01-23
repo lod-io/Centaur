@@ -1,6 +1,7 @@
 import { Box, Paper, styled } from "@mui/material";
 import { Horse } from "../types";
 import { useMediaQuery, useTheme } from "@mui/material";
+import React from "react";
 
 const RaceTrackContainer = styled(Paper)(({ theme }) => ({
   display: "grid",
@@ -13,6 +14,7 @@ const RaceTrackContainer = styled(Paper)(({ theme }) => ({
   alignItems: "center",
   width: "100%",
   position: "relative",
+  minHeight: "300px",
   "& > *": {
     aspectRatio: "1 / 1",
   },
@@ -27,14 +29,15 @@ const RaceTrackContainer = styled(Paper)(({ theme }) => ({
 }));
 
 const HorseCell = styled(Box)<{ $selected?: boolean }>(({ theme }) => ({
-  width: "70%",
+  width: "clamp(30px, 5vw, 60px)",
+  height: "clamp(30px, 5vw, 60px)",
   borderRadius: "50%",
   display: "flex",
   alignItems: "center",
   justifyContent: "center",
-  transition: "all 0.3s ease",
-  position: "relative",
-  margin: "10px",
+  transition: "all 0.5s ease-in-out",
+  position: "absolute",
+  margin: "clamp(5px, 1vw, 10px)",
 }));
 
 const HorseContent = styled(Box)({
@@ -58,7 +61,7 @@ const SleepOverlay = styled(Box)({
   justifyContent: "center",
   border: "2px solid #e0e0e0",
   boxShadow: "0 2px 4px rgba(0, 0, 0, 0.1)",
-  fontSize: "1.3em",
+  fontSize: "clamp(0.8em, 1.2vw, 1.3em)",
 });
 
 // const HorseName = styled(Box)({
@@ -117,7 +120,8 @@ interface RaceTrackProps {
 
 const RaceTrack: React.FC<RaceTrackProps> = ({ horses }) => {
   const theme = useTheme();
-  const isSmallScreen = useMediaQuery(theme.breakpoints.down("md")); // lg is typically 1200px
+  const isSmallScreen = useMediaQuery(theme.breakpoints.down("md"));
+  const trackRef = React.useRef<HTMLDivElement>(null);
 
   // Create a list of horses that have finished, sorted by finishTime
   const finishedHorses = horses
@@ -125,7 +129,7 @@ const RaceTrack: React.FC<RaceTrackProps> = ({ horses }) => {
     .sort((a, b) => (a.finishTime || 0) - (b.finishTime || 0));
 
   return (
-    <RaceTrackContainer elevation={3}>
+    <RaceTrackContainer ref={trackRef} elevation={3}>
       <StartLine />
       <FinishLine />
       {horses.map((horse) => (
@@ -133,7 +137,7 @@ const RaceTrack: React.FC<RaceTrackProps> = ({ horses }) => {
           key={`hello-${horse.id}`}
           sx={{
             gridRow: horse.id,
-            gridColumn: 6, // Middle column (6 of 11)
+            gridColumn: 6,
             whiteSpace: "nowrap",
             color: theme.palette.text.primary,
             fontWeight: "semibold",
@@ -146,7 +150,6 @@ const RaceTrack: React.FC<RaceTrackProps> = ({ horses }) => {
       {horses.map((horse) => {
         let overlayIcon = null;
 
-        // Assign medals to the top three finishers
         if (horse.position >= 10) {
           const finishIndex = finishedHorses.findIndex(
             (h) => h.id === horse.id
@@ -156,12 +159,23 @@ const RaceTrack: React.FC<RaceTrackProps> = ({ horses }) => {
           else if (finishIndex === 2) overlayIcon = "🥉";
         }
 
+        // Calculate position as percentage of track width
+        // Map position 0-10 to exactly 9%-91% of track width
+        const trackStart = 0;
+        const trackEnd = 91;
+        const trackWidth = trackEnd - trackStart;
+        const leftPosition = `${
+          trackStart + (horse.position / 10) * trackWidth + 1
+        }%`;
+        // Adjust vertical position and add some padding
+        const topPosition = `calc(${(horse.id - 1) * 25}% + 15px)`;
+
         return (
           <HorseCell
             key={horse.id}
             sx={{
-              gridRow: horse.id,
-              gridColumn: horse.position + 1,
+              left: leftPosition,
+              top: topPosition,
               opacity: horse.isProcessing ? 0.5 : 1,
               backgroundColor: `${horse.color}50`,
               border: `2px solid ${horse.color}`,
@@ -169,17 +183,15 @@ const RaceTrack: React.FC<RaceTrackProps> = ({ horses }) => {
           >
             <HorseContent>
               {isSmallScreen ? (
-                // Show only status or medal icon on small screens
                 <Box sx={{ fontSize: "1em" }}>
                   {horse.isWaiting ? "💤" : null}
                   {overlayIcon ? overlayIcon : null}
                 </Box>
               ) : (
-                // Show horse emoji and overlay icons on larger screens
                 <>
                   <Box
                     sx={{
-                      fontSize: "2em",
+                      fontSize: "clamp(1em, 1.8vw, 2em)",
                       transform: "scaleX(-1)",
                     }}
                   >
