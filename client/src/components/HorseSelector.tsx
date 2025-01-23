@@ -5,8 +5,8 @@ import {
   Select,
   Stack,
 } from "@mui/material";
-import { Horse, MODEL_OPTIONS } from "../types";
-import { useEffect } from "react";
+import { Horse, ModelOption } from "../types";
+import { useEffect, useState } from "react";
 
 interface HorseSelectorProps {
   horses: Horse[];
@@ -19,26 +19,54 @@ const HorseSelector: React.FC<HorseSelectorProps> = ({
   isRaceStarted,
   onNameChange,
 }) => {
+  const [models, setModels] = useState<ModelOption[]>([]);
+
+  useEffect(() => {
+    const fetchModels = async () => {
+      try {
+        const apiUrl =
+          process.env.REACT_APP_API_URL ||
+          "https://centaur-server.onrender.com";
+        const response = await fetch(`${apiUrl}/api/models`);
+        const data: string[] = await response.json();
+
+        // Remove duplicates and create model options
+        const uniqueModels = Array.from(new Set(data));
+        const modelOptions: ModelOption[] = uniqueModels.map(
+          (modelName, index) => ({
+            name: modelName,
+            value: modelName,
+            id: index,
+          })
+        );
+        setModels(modelOptions);
+
+        // Randomly assign models if none are selected
+        const hasNoModelsSelected = horses.every((horse) => !horse.modelValue);
+        if (hasNoModelsSelected && !isRaceStarted && modelOptions.length > 0) {
+          const availableModels = [...modelOptions];
+          horses.forEach((horse) => {
+            if (availableModels.length > 0) {
+              const randomIndex = Math.floor(
+                Math.random() * availableModels.length
+              );
+              const randomModel = availableModels[randomIndex];
+              availableModels.splice(randomIndex, 1);
+              onNameChange(horse.id, randomModel.value);
+            }
+          });
+        }
+      } catch (error) {
+        console.error("Error fetching models:", error);
+      }
+    };
+
+    fetchModels();
+  }, []);
+
   const isModelSelected = (modelValue: string) => {
     return horses.some((horse) => horse.modelValue === modelValue);
   };
-
-  useEffect(() => {
-    const hasNoModelsSelected = horses.every((horse) => !horse.modelValue);
-
-    if (hasNoModelsSelected && !isRaceStarted) {
-      const availableModels = [...MODEL_OPTIONS];
-
-      horses.forEach((horse) => {
-        const randomIndex = Math.floor(Math.random() * availableModels.length);
-        const randomModel = availableModels[randomIndex];
-
-        availableModels.splice(randomIndex, 1);
-
-        onNameChange(horse.id, randomModel.value);
-      });
-    }
-  }, []);
 
   return (
     <Stack
@@ -76,7 +104,7 @@ const HorseSelector: React.FC<HorseSelectorProps> = ({
             </InputLabel>
             <Select
               labelId={`horse-${horse.id}-label`}
-              value={horse.modelValue}
+              value={horse.modelValue || ""}
               label={`Choose Jockey`}
               onChange={(e) => onNameChange(horse.id, e.target.value)}
               disabled={isRaceStarted}
@@ -87,9 +115,9 @@ const HorseSelector: React.FC<HorseSelectorProps> = ({
                 },
               }}
             >
-              {MODEL_OPTIONS.map((model) => (
+              {models.map((model) => (
                 <MenuItem
-                  key={model.value}
+                  key={`${model.value}-${model.id}`}
                   value={model.value}
                   disabled={
                     isModelSelected(model.value) &&

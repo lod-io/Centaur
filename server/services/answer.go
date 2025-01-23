@@ -2,6 +2,7 @@ package services
 
 import (
 	"bytes"
+	"centaur/constants"
 	"centaur/models"
 	"encoding/json"
 	"fmt"
@@ -37,7 +38,7 @@ func (s *AnswerService) generateAnswer(model string, question models.Question) s
 		return question.Choices[rand.Intn(len(question.Choices))]
 	}
 
-	url := "https://api.clod.io/v1/chat/completions"
+	url := constants.ChatCompletionsEndpoint
 
 	instructions := `You are a choice selector. Your ONLY job is to select ONE answer from the provided choices.
 		CRITICAL RULES:

@@ -16,8 +16,8 @@ choices: ["24-21 Rams", "20-17 Bengals", "23-20 Rams", "27-24 Bengals"]
 {
 id: "3",
 content: "Where was Super Bowl LVI played?",
-answer: "SoFi Stadium, Inglewood, California",
-choices: ["MetLife Stadium", "SoFi Stadium, Inglewood, California", "Raymond James Stadium", "State Farm Stadium"]
+answer: "SoFi Stadium",
+choices: ["MetLife Stadium", "SoFi Stadium", "Raymond James Stadium", "State Farm Stadium"]
 },
 {
 id: "4",

@@ -8,14 +8,7 @@ import {
   createTheme,
   useMediaQuery,
 } from "@mui/material";
-import {
-  Answer,
-  GameState,
-  Horse,
-  MODEL_OPTIONS,
-  Question,
-  AttemptedQuestion,
-} from "./types";
+import { Answer, GameState, Horse, Question, AttemptedQuestion } from "./types";
 import RaceTrack from "./components/RaceTrack";
 import HorseSelector from "./components/HorseSelector";
 import QAContainer from "./components/QAContainer";
@@ -297,24 +290,18 @@ function App() {
   };
 
   const handleNameChange = async (horseId: number, newValue: string) => {
-    const selectedModel = MODEL_OPTIONS.find(
-      (model) => model.value === newValue
-    );
-
-    if (selectedModel) {
-      setGameState((prev) => ({
-        ...prev,
-        horses: prev.horses.map((h) =>
-          h.id === horseId
-            ? {
-                ...h,
-                name: selectedModel.name,
-                modelValue: selectedModel.value,
-              }
-            : h
-        ),
-      }));
-    }
+    setGameState((prev) => ({
+      ...prev,
+      horses: prev.horses.map((h) =>
+        h.id === horseId
+          ? {
+              ...h,
+              name: newValue,
+              modelValue: newValue,
+            }
+          : h
+      ),
+    }));
   };
 
   const canStartRace = () => {

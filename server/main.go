@@ -22,11 +22,11 @@ func init() {
 func main() {
 	// Initialize services
 	answerService := services.NewAnswerService()
-
+	modelsService := services.NewModelsService()
 	// Initialize handlers
 	answerHandler := handlers.NewAnswerHandler(answerService)
 	wsHandler := handlers.NewWebSocketHandler()
-
+	modelsHandler := handlers.NewModelsHandler(modelsService)
 	// Setup router
 	r := mux.NewRouter()
 	r.Use(mux.CORSMethodMiddleware(r))
@@ -35,7 +35,7 @@ func main() {
 	// Register routes
 	r.HandleFunc("/api/submit-answer", answerHandler.SubmitAnswer).Methods("POST", "OPTIONS")
 	r.HandleFunc("/ws", wsHandler.HandleWebSocket)
-
+	r.HandleFunc("/api/models", modelsHandler.GetModels).Methods("GET", "OPTIONS")
 	// Start server
 	port := os.Getenv("PORT")
 	if port == "" {

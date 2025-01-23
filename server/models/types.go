@@ -17,3 +17,11 @@ type Question struct {
 	Answer  string   `json:"answer"`
 	Choices []string `json:"choices"`
 }
+
+type ClodModel struct {
+	SystemName string `json:"systemName"`
+}
+
+type ModelsResponse struct {
+	Models []ClodModel `json:"models"`
+}
