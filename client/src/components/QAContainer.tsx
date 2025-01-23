@@ -70,7 +70,7 @@ const QAContainer: React.FC<QAContainerProps> = ({
         }
       }, 100);
     }
-  }, [answers, questions]);
+  }, [answers, questions, isSmallScreen]);
 
   return (
     <QAContainerStyled elevation={3}>

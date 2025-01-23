@@ -62,7 +62,7 @@ const HorseSelector: React.FC<HorseSelectorProps> = ({
     };
 
     fetchModels();
-  }, []);
+  }, [horses, isRaceStarted, onNameChange]);
 
   const isModelSelected = (modelValue: string) => {
     return horses.some((horse) => horse.modelValue === modelValue);

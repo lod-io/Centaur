@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import {
   Button,
   CssBaseline,
@@ -121,6 +121,154 @@ function App() {
     };
   }, [isRaceStarted]);
 
+  const submitAnswer = useCallback(
+    async (horseId: number, question: Question) => {
+      // Check if this horse has already attempted this question
+      const hasAttempted = attemptedQuestions.some(
+        (attempt) =>
+          attempt.horseId === horseId && attempt.questionId === question.id
+      );
+
+      if (hasAttempted) {
+        return;
+      }
+
+      const horse = gameState.horses.find((h) => h.id === horseId);
+
+      if (
+        !horse?.modelValue ||
+        horse.isProcessing ||
+        horse.isWaiting ||
+        horse.position >= 10
+      ) {
+        console.log("Submission blocked:", {
+          noModelValue: !horse?.modelValue,
+          isProcessing: horse?.isProcessing ?? false,
+          isWaiting: horse?.isWaiting ?? false,
+          alreadyFinished:
+            horse?.position !== undefined && horse.position >= 10,
+        });
+        return;
+      }
+
+      try {
+        setAttemptedQuestions((prev) => [
+          ...prev,
+          { horseId, questionId: question.id },
+        ]);
+
+        setGameState((prev) => ({
+          ...prev,
+          horses: prev.horses.map((h) =>
+            h.id === horseId ? { ...h, isProcessing: true } : h
+          ),
+        }));
+
+        const payload = {
+          horseId: horseId,
+          question: {
+            id: question.id,
+            content: question.content,
+            answer: question.answer,
+            choices: question.choices,
+          },
+          modelValue: horse.modelValue,
+        };
+
+        const apiUrl =
+          process.env.REACT_APP_API_URL ||
+          "https://centaur-server.onrender.com";
+        const response = await fetch(`${apiUrl}/api/submit-answer`, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(payload),
+        });
+
+        const responseText = await response.text();
+
+        if (!responseText) {
+          console.error("Empty response body");
+          return; // Stop the program if the body is empty
+        }
+
+        const result = JSON.parse(responseText);
+
+        setGameState((prev) => {
+          const newHorses = prev.horses.map((h): Horse => {
+            if (h.id === horseId) {
+              const currentHorse = prev.horses.find((ph) => ph.id === horseId)!;
+              if (currentHorse.position >= 10) {
+                return currentHorse;
+              }
+
+              if (result.approved) {
+                const newPosition = Math.min(h.position + 1, 10);
+                return {
+                  ...h,
+                  position: newPosition,
+                  isProcessing: false,
+                  isWaiting: false,
+                  finishTime: newPosition === 10 ? Date.now() : h.finishTime,
+                };
+              } else {
+                const currentPosition = h.position;
+                setTimeout(() => {
+                  setGameState((prevState) => ({
+                    ...prevState,
+                    horses: prevState.horses.map((horse) => {
+                      if (horse.id === horseId) {
+                        if (horse.position >= 10) {
+                          return horse;
+                        }
+                        return {
+                          ...horse,
+                          position: Math.min(currentPosition + 1, 10),
+                          isProcessing: false,
+                          isWaiting: false,
+                          finishTime:
+                            currentPosition + 1 === 10
+                              ? Date.now()
+                              : horse.finishTime,
+                        };
+                      }
+                      return horse;
+                    }),
+                  }));
+                }, penaltyTime * 1000);
+                return { ...h, isProcessing: false, isWaiting: true };
+              }
+            }
+            return h;
+          });
+
+          const newAnswer: Answer = {
+            id: `${question.id}-${horseId}-${Date.now()}`,
+            questionId: question.id,
+            horseId,
+            content: result.answer,
+            status: result.approved ? "approved" : "rejected",
+            timestamp: new Date().toISOString(),
+          };
+
+          return {
+            ...prev,
+            horses: newHorses,
+            answers: [...prev.answers, newAnswer],
+          };
+        });
+      } catch (error) {
+        console.error("Error submitting answer:", error);
+        setGameState((prev) => ({
+          ...prev,
+          horses: prev.horses.map((h) =>
+            h.id === horseId ? { ...h, isProcessing: false } : h
+          ),
+        }));
+      }
+    },
+    [attemptedQuestions, gameState.horses, penaltyTime]
+  );
+
   useEffect(() => {
     const processHorses = async () => {
       if (!isRaceStarted) return;
@@ -140,154 +288,7 @@ function App() {
     };
 
     processHorses();
-  }, [isRaceStarted, gameState.horses]);
-
-  const submitAnswer = async (horseId: number, question: Question) => {
-    // Check if this horse has already attempted this question
-    const hasAttempted = attemptedQuestions.some(
-      (attempt) =>
-        attempt.horseId === horseId && attempt.questionId === question.id
-    );
-
-    if (hasAttempted) {
-      // console.log(
-      //   `Horse ${horseId} has already attempted question ${question.id}`
-      // );
-      return;
-    }
-
-    const horse = gameState.horses.find((h) => h.id === horseId);
-
-    if (
-      !horse?.modelValue ||
-      horse.isProcessing ||
-      horse.isWaiting ||
-      horse.position >= 10
-    ) {
-      console.log("Submission blocked:", {
-        noModelValue: !horse?.modelValue,
-        isProcessing: horse?.isProcessing ?? false,
-        isWaiting: horse?.isWaiting ?? false,
-        alreadyFinished: horse?.position !== undefined && horse.position >= 10,
-      });
-      return;
-    }
-
-    try {
-      // Mark this question as attempted before making the API call
-      setAttemptedQuestions((prev) => [
-        ...prev,
-        { horseId, questionId: question.id },
-      ]);
-
-      setGameState((prev) => ({
-        ...prev,
-        horses: prev.horses.map((h) =>
-          h.id === horseId ? { ...h, isProcessing: true } : h
-        ),
-      }));
-
-      const payload = {
-        horseId: horseId,
-        question: {
-          id: question.id,
-          content: question.content,
-          answer: question.answer,
-          choices: question.choices,
-        },
-        modelValue: horse.modelValue,
-      };
-
-      const apiUrl =
-        process.env.REACT_APP_API_URL || "https://centaur-server.onrender.com";
-      const response = await fetch(`${apiUrl}/api/submit-answer`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(payload),
-      });
-
-      const responseText = await response.text();
-
-      if (!responseText) {
-        console.error("Empty response body");
-        return; // Stop the program if the body is empty
-      }
-
-      const result = JSON.parse(responseText);
-
-      setGameState((prev) => {
-        const newHorses = prev.horses.map((h): Horse => {
-          if (h.id === horseId) {
-            const currentHorse = prev.horses.find((ph) => ph.id === horseId)!;
-            if (currentHorse.position >= 10) {
-              return currentHorse;
-            }
-
-            if (result.approved) {
-              const newPosition = Math.min(h.position + 1, 10);
-              return {
-                ...h,
-                position: newPosition,
-                isProcessing: false,
-                isWaiting: false,
-                finishTime: newPosition === 10 ? Date.now() : h.finishTime,
-              };
-            } else {
-              const currentPosition = h.position;
-              setTimeout(() => {
-                setGameState((prevState) => ({
-                  ...prevState,
-                  horses: prevState.horses.map((horse) => {
-                    if (horse.id === horseId) {
-                      if (horse.position >= 10) {
-                        return horse;
-                      }
-                      return {
-                        ...horse,
-                        position: Math.min(currentPosition + 1, 10),
-                        isProcessing: false,
-                        isWaiting: false,
-                        finishTime:
-                          currentPosition + 1 === 10
-                            ? Date.now()
-                            : horse.finishTime,
-                      };
-                    }
-                    return horse;
-                  }),
-                }));
-              }, penaltyTime * 1000);
-              return { ...h, isProcessing: false, isWaiting: true };
-            }
-          }
-          return h;
-        });
-
-        const newAnswer: Answer = {
-          id: `${question.id}-${horseId}-${Date.now()}`,
-          questionId: question.id,
-          horseId,
-          content: result.answer,
-          status: result.approved ? "approved" : "rejected",
-          timestamp: new Date().toISOString(),
-        };
-
-        return {
-          ...prev,
-          horses: newHorses,
-          answers: [...prev.answers, newAnswer],
-        };
-      });
-    } catch (error) {
-      console.error("Error submitting answer:", error);
-      setGameState((prev) => ({
-        ...prev,
-        horses: prev.horses.map((h) =>
-          h.id === horseId ? { ...h, isProcessing: false } : h
-        ),
-      }));
-    }
-  };
+  }, [isRaceStarted, gameState.horses, gameState.questions, submitAnswer]);
 
   const handleNameChange = async (horseId: number, newValue: string) => {
     setGameState((prev) => ({

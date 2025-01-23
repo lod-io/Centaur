@@ -4,7 +4,6 @@ import {
   Popover,
   Stack,
   Typography,
-  Grid,
   useTheme,
   useMediaQuery,
 } from "@mui/material";
@@ -13,13 +12,9 @@ import {
   TwitterShareButton,
   LinkedinShareButton,
   FacebookShareButton,
-  TelegramShareButton,
-  WhatsappShareButton,
   XIcon,
   LinkedinIcon,
   FacebookIcon,
-  TelegramIcon,
-  WhatsappIcon,
 } from "react-share";
 import { usePopovers } from "../hooks/usePopovers";
 import { CustomizePopover } from "./CustomizePopover";
