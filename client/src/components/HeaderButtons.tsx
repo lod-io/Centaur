@@ -103,9 +103,9 @@ export const HeaderButtons = ({
             <li>Click "Begin Race 🏆" to start</li>
             <li>Watch as each AI horse races by answering questions</li>
           </ol>
-          Horses advance when they answer correctly, but if they make a mistake,
-          they'll take a quick nap (💤) for a few seconds. The first three
-          horses to cross the finish line win medals!
+          Horses advance two steps forward when they answer correctly.
+          Otherwise, they advance one step forward. The first three horses to
+          cross the finish line win medals!
         </Typography>
       </Popover>
       <Button
